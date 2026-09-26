@@ -1,0 +1,49 @@
+# ============================================================
+# SEGREDOS — nunca versionar (RF15 e RF33)
+# ============================================================
+.env
+hop/environments/*-secrets.json
+lgpd/segredos/
+*.salt
+*.key
+
+# ============================================================
+# Dados gerados pelo pipeline (reproduzíveis a partir de dados/fontes)
+# Mantemos só o .gitkeep e as amostras pedidas no RF34.
+# ============================================================
+dados/bronze/*
+dados/silver/*
+dados/gold/*
+dados/quarentena/*
+!dados/*/.gitkeep
+!dados/*/amostras/
+
+logs/*
+!logs/.gitkeep
+
+# ============================================================
+# Apache Hop — arquivos locais de cada máquina
+# ============================================================
+hop/metadata/.hop/
+hop/audit/
+*.hpl.bak
+*.hwf.bak
+
+# ============================================================
+# Python
+# ============================================================
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ============================================================
+# Ferramentas que rodam por Docker, fora do projeto
+# (NÃO clonar o código do Superset/OpenMetadata dentro do repositório)
+# ============================================================
+superset/superset/
+openmetadata/docker-volume/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

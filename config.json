@@ -1,0 +1,35 @@
+{
+  "ambiente": "dev",
+  "fontes": {
+    "catalogo_csv": "dados/fontes/catalogo_conteudos.csv",
+    "interacoes_json": "dados/fontes/interacoes_usuarios.json",
+    "comentarios_json": "dados/fontes/comentarios_avaliacoes.json"
+  },
+  "camadas": {
+    "bronze": "dados/bronze",
+    "silver": "dados/silver",
+    "gold": "dados/gold",
+    "quarentena": "dados/quarentena"
+  },
+  "postgres": {
+    "host": "localhost",
+    "porta": 5432,
+    "banco": "desafio_dados",
+    "schema_origem_desafio1": "public",
+    "schemas": {
+      "bronze": "bronze",
+      "silver": "silver",
+      "gold": "gold",
+      "quarentena": "quarentena",
+      "controle": "controle"
+    }
+  },
+  "mongodb": {
+    "banco": "desafio_dados",
+    "colecao_comentarios": "comentarios_avaliacoes"
+  },
+  "logging": {
+    "diretorio": "logs",
+    "nivel": "INFO"
+  }
+}

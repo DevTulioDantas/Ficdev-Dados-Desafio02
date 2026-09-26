@@ -1,0 +1,20 @@
+{
+  "variables": [
+    { "name": "AMBIENTE",          "value": "dev",                                   "description": "Nome do ambiente de execução" },
+    { "name": "DIR_FONTES",        "value": "${PROJECT_HOME}/../dados/fontes",       "description": "Arquivos originais do Desafio 1 (somente leitura)" },
+    { "name": "DIR_BRONZE",        "value": "${PROJECT_HOME}/../dados/bronze",       "description": "Saída em arquivo da camada Bronze" },
+    { "name": "DIR_SILVER",        "value": "${PROJECT_HOME}/../dados/silver",       "description": "Saída em arquivo da camada Silver" },
+    { "name": "DIR_GOLD",          "value": "${PROJECT_HOME}/../dados/gold",         "description": "Saída em arquivo da camada Gold" },
+    { "name": "DIR_QUARENTENA",    "value": "${PROJECT_HOME}/../dados/quarentena",   "description": "Registros rejeitados pelas regras" },
+    { "name": "DIR_LOGS",          "value": "${PROJECT_HOME}/../logs",               "description": "Logs de execução" },
+    { "name": "PG_HOST",           "value": "localhost",                             "description": "Host do PostgreSQL" },
+    { "name": "PG_PORTA",          "value": "5432",                                  "description": "Porta do PostgreSQL" },
+    { "name": "PG_BANCO",          "value": "desafio_dados",                         "description": "Banco do Desafio 1, reaproveitado" },
+    { "name": "PG_SCHEMA_ORIGEM",  "value": "public",                                "description": "Schema das tabelas do Desafio 1 (fonte)" },
+    { "name": "PG_SCHEMA_BRONZE",  "value": "bronze",                                "description": "Schema da camada Bronze" },
+    { "name": "PG_SCHEMA_SILVER",  "value": "silver",                                "description": "Schema da camada Silver" },
+    { "name": "PG_SCHEMA_GOLD",    "value": "gold",                                  "description": "Schema da camada Gold" },
+    { "name": "PG_SCHEMA_QUAR",    "value": "quarentena",                            "description": "Schema da quarentena" },
+    { "name": "PG_SCHEMA_CONTROLE","value": "controle",                              "description": "Execuções, logs de etapa e resultados de qualidade" }
+  ]
+}
