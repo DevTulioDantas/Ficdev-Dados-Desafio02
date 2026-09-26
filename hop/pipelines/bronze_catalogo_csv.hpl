@@ -182,10 +182,114 @@
     </partitioning>
     <attributes/>
   </transform>
+  <transform>
+    <type>SystemInfo</type>
+    <name>Auditoria data hora</name>
+    <fields>
+      <field>
+        <name>data_hora_ingestao</name>
+        <type>system date (fixed)</type>
+      </field>
+    </fields>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>576</xloc>
+      <yloc>128</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
+  <transform>
+    <type>GetVariable</type>
+    <name>Auditoria execução</name>
+    <fields>
+      <field>
+        <name>id_execucao</name>
+        <variable>${ID_EXECUCAO}</variable>
+        <type>String</type>
+        <format/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+        <trim_type>none</trim_type>
+      </field>
+    </fields>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>736</xloc>
+      <yloc>128</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
+  <transform>
+    <type>TableOutput</type>
+    <name>Gravar catalogo bronze</name>
+    <connection>pg_desafio</connection>
+    <schema>bronze</schema>
+    <table>catalogo_conteudos</table>
+    <commit>1000</commit>
+    <truncate>Y</truncate>
+    <only_when_have_rows>N</only_when_have_rows>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <specify_fields>N</specify_fields>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <add_columns>N</add_columns>
+    <drop_columns>N</drop_columns>
+    <change_column_types>N</change_column_types>
+    <fields/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>736</xloc>
+      <yloc>256</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
   <order>
     <hop>
       <from>Ler catalogo CSV</from>
       <to>Auditoria origem</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Auditoria origem</from>
+      <to>Auditoria data hora</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Auditoria data hora</from>
+      <to>Auditoria execução</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Auditoria execução</from>
+      <to>Gravar catalogo bronze</to>
       <enabled>Y</enabled>
     </hop>
   </order>
