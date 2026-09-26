@@ -1,17 +1,16 @@
 -- =====================================================================
--- Passo 0 — Schemas das camadas do Desafio 2
--- Roda no MESMO banco do Desafio 1 (desafio_dados). As tabelas do
--- Desafio 1 continuam intactas no schema "public" e passam a ser FONTE.
+-- Prepara os schemas da arquitetura medallion (Aula 03 — Módulo 2).
+-- Executado pela action SQL no início do workflow principal:
+-- "o workflow prepara o terreno antes de pisar nele".
+-- Idempotente: pode rodar quantas vezes for preciso.
+-- As tabelas do Desafio 1 continuam no schema "public" e são a FONTE.
 -- =====================================================================
 
-CREATE SCHEMA IF NOT EXISTS bronze;      -- cópia fiel + campos de auditoria
-CREATE SCHEMA IF NOT EXISTS silver;      -- dados padronizados e validados
-CREATE SCHEMA IF NOT EXISTS gold;        -- tabelas/visões para KPIs e Superset
-CREATE SCHEMA IF NOT EXISTS quarentena;  -- registros rejeitados + motivo
-CREATE SCHEMA IF NOT EXISTS controle;    -- execuções, etapas, testes de qualidade
+CREATE SCHEMA IF NOT EXISTS bronze;   -- dado bruto, como veio da fonte (staging)
+CREATE SCHEMA IF NOT EXISTS silver;   -- dado limpo, padronizado, deduplicado, tipado
+                                      -- + silver.rejeitados (quarentena)
+CREATE SCHEMA IF NOT EXISTS gold;     -- dado agregado e modelado para análise
 
-COMMENT ON SCHEMA bronze     IS 'Camada Bronze: dados ingeridos sem transformações destrutivas';
-COMMENT ON SCHEMA silver     IS 'Camada Silver: dados padronizados, deduplicados e validados';
-COMMENT ON SCHEMA gold       IS 'Camada Gold: modelos analíticos consumidos pelo SQL Lab e Superset';
-COMMENT ON SCHEMA quarentena IS 'Registros inválidos, com regra violada e mensagem de erro';
-COMMENT ON SCHEMA controle   IS 'Metadados operacionais: execuções, duração, status e qualidade';
+COMMENT ON SCHEMA bronze IS 'Camada Bronze: dado bruto, como veio da fonte';
+COMMENT ON SCHEMA silver IS 'Camada Silver: dado limpo, padronizado, deduplicado e tipado';
+COMMENT ON SCHEMA gold   IS 'Camada Gold: dado agregado e modelado para análise';

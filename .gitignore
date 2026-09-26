@@ -24,7 +24,6 @@ logs/*
 # ============================================================
 # Apache Hop — arquivos locais de cada máquina
 # ============================================================
-hop/metadata/.hop/
 hop/audit/
 *.hpl.bak
 *.hwf.bak

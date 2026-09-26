@@ -39,17 +39,14 @@ Parâmetros ficam **fora** dos pipelines; segredos ficam **fora** do repositóri
 
 ### Primeira configuração
 
-```bash
-cp .env.example .env
-cp hop/environments/dev-secrets.json.example hop/environments/dev-secrets.json
+```powershell
+Copy-Item .env.example .env
+Copy-Item hop/environments/dev-secrets.json.example hop/environments/dev-secrets.json
 # edite os dois com suas credenciais locais
 ```
 
-Criar os schemas das camadas no PostgreSQL do Desafio 1:
-
-```bash
-docker exec -i desafio-postgres psql -U postgres -d desafio_dados < sql/00_criar_schemas.sql
-```
+Os schemas `bronze`, `silver` e `gold` são criados automaticamente pela
+primeira action (SQL) do workflow principal, a partir de `sql/00_criar_schemas.sql`.
 
 ## Estrutura
 

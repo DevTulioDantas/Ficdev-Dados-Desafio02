@@ -19,9 +19,7 @@
     "schemas": {
       "bronze": "bronze",
       "silver": "silver",
-      "gold": "gold",
-      "quarentena": "quarentena",
-      "controle": "controle"
+      "gold": "gold"
     }
   },
   "mongodb": {
