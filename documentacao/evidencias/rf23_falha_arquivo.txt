@@ -1,0 +1,20 @@
+﻿2026/09/27 12:29:55 - carga_completa - Finished action [Start] (result=[true])
+2026/09/27 12:29:55 - carga_completa - Finished action [Criar schemas] (result=[true])
+2026/09/27 12:29:55 - carga_completa - Finished action [Criar tabelas bronze] (result=[true])
+2026/09/27 12:29:55 - carga_completa - Finished action [Criar tabelas silver] (result=[true])
+An error occurred while creating field mapping
+2026/09/27 12:29:56 - Ler catalogo CSV.0 - ERROR: Unexpected error
+2026/09/27 12:29:56 - Ler catalogo CSV.0 - An error occurred while creating field mapping
+2026/09/27 12:29:56 - bronze_catalogo_csv - Pipeline detected one or more transforms with errors.
+2026/09/27 12:29:56 - carga_completa - Finished action [Bronze catalogo] (result=[false])
+2026/09/27 12:29:56 - Carga completa - FALHA na carga completa. Verifique a �ltima action executada no log. ID_EXECUCAO=7a60bbf0-bf31-462d-82d3-519ce3856dfc
+2026/09/27 12:29:56 - carga_completa - Finished action [Log erro] (result=[true])
+2026/09/27 12:29:56 - Abort workflow - ERROR: Aborting workflow.
+2026/09/27 12:29:56 - carga_completa - Finished action [Abort workflow] (result=[false])
+   camada   | count 
+------------+-------
+ bronze     |     0
+ silver     |  1000
+ quarentena |     3
+(3 rows)
+
