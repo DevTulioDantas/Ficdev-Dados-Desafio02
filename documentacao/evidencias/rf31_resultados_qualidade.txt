@@ -1,0 +1,24 @@
+﻿  execucao   |    id    | teste_id | valor_medido | limite | severidade | resultado 
+-------------+----------+----------+--------------+--------+------------+-----------
+ 27/09 13:12 | 6cffd0cf | Q01      |       100.00 |  95.00 | ALERTA     | APROVADO
+ 27/09 13:12 | 6cffd0cf | Q02      |       100.00 | 100.00 | CRITICA    | APROVADO
+ 27/09 13:12 | 6cffd0cf | Q03      |         0.00 |   0.00 | CRITICA    | APROVADO
+ 27/09 13:12 | 6cffd0cf | Q04      |         7.70 |   5.00 | ALERTA     | REPROVADO
+ 27/09 13:12 | 6cffd0cf | Q05      |         0.00 |   0.00 | CRITICA    | APROVADO
+ 27/09 13:16 | ebba5216 | Q01      |       100.00 |  95.00 | ALERTA     | APROVADO
+ 27/09 13:16 | ebba5216 | Q02      |       100.00 | 100.00 | CRITICA    | APROVADO
+ 27/09 13:16 | ebba5216 | Q03      |         0.00 |   0.00 | CRITICA    | APROVADO
+ 27/09 13:16 | ebba5216 | Q04      |         7.70 |   5.00 | ALERTA     | REPROVADO
+ 27/09 13:16 | ebba5216 | Q05      |         0.00 |   0.00 | CRITICA    | APROVADO
+ 27/09 13:18 | 4774db5a | Q01      |       100.00 |  95.00 | ALERTA     | APROVADO
+ 27/09 13:18 | 4774db5a | Q02      |       100.00 | 101.00 | CRITICA    | REPROVADO
+ 27/09 13:18 | 4774db5a | Q03      |         0.00 |   0.00 | CRITICA    | APROVADO
+ 27/09 13:18 | 4774db5a | Q04      |         7.70 |   5.00 | ALERTA     | REPROVADO
+ 27/09 13:18 | 4774db5a | Q05      |         0.00 |   0.00 | CRITICA    | APROVADO
+ 27/09 13:19 | dd653ce9 | Q01      |       100.00 |  95.00 | ALERTA     | APROVADO
+ 27/09 13:19 | dd653ce9 | Q02      |       100.00 | 100.00 | CRITICA    | APROVADO
+ 27/09 13:19 | dd653ce9 | Q03      |         0.00 |   0.00 | CRITICA    | APROVADO
+ 27/09 13:19 | dd653ce9 | Q04      |         7.70 |   5.00 | ALERTA     | REPROVADO
+ 27/09 13:19 | dd653ce9 | Q05      |         0.00 |   0.00 | CRITICA    | APROVADO
+(20 rows)
+
