@@ -107,7 +107,7 @@
       <description/>
       <type>SQL</type>
       <attributes/>
-      <xloc>2304</xloc>
+      <xloc>2480</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -139,7 +139,7 @@
       <name>Bronze catalogo</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>864</xloc>
+      <xloc>1040</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -171,7 +171,7 @@
       <name>Bronze interacoes</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1040</xloc>
+      <xloc>1216</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -203,7 +203,7 @@
       <name>Bronze comentarios</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1216</xloc>
+      <xloc>1392</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -235,7 +235,7 @@
       <name>Bronze recomendacao</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1408</xloc>
+      <xloc>1584</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -267,7 +267,7 @@
       <name>Silver catalogo</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1600</xloc>
+      <xloc>1776</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -299,7 +299,7 @@
       <name>Silver interacoes</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1776</xloc>
+      <xloc>1952</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -331,7 +331,7 @@
       <name>Silver recomendacao</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>2128</xloc>
+      <xloc>2304</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -363,7 +363,7 @@
       <name>Silver comentarios</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1952</xloc>
+      <xloc>2128</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -376,7 +376,7 @@
       <description/>
       <type>WRITE_TO_LOG</type>
       <attributes/>
-      <xloc>2832</xloc>
+      <xloc>3712</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -386,7 +386,7 @@
       <description/>
       <type>SUCCESS</type>
       <attributes/>
-      <xloc>3008</xloc>
+      <xloc>3888</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -430,7 +430,7 @@
       <description/>
       <type>EVAL_TABLE_CONTENT</type>
       <attributes/>
-      <xloc>2480</xloc>
+      <xloc>2656</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -450,7 +450,7 @@
       <description/>
       <type>EVAL_TABLE_CONTENT</type>
       <attributes/>
-      <xloc>2656</xloc>
+      <xloc>3536</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -463,7 +463,7 @@
       <description/>
       <type>WRITE_TO_LOG</type>
       <attributes/>
-      <xloc>2832</xloc>
+      <xloc>3712</xloc>
       <yloc>256</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -476,8 +476,153 @@
       <description/>
       <type>WRITE_TO_LOG</type>
       <attributes/>
-      <xloc>2480</xloc>
+      <xloc>2656</xloc>
       <yloc>256</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <sql/>
+      <connection>pg_desafio</connection>
+      <useVariableSubstitution>N</useVariableSubstitution>
+      <sqlfromfile>Y</sqlfromfile>
+      <sqlfilename>${PROJECT_HOME}/sql/05_criar_tabelas_gold.sql</sqlfilename>
+      <sqlfilename_encoding/>
+      <sendOneStatement>N</sendOneStatement>
+      <name>Criar tabelas gold</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <xloc>864</xloc>
+      <yloc>112</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/gold_dim_conteudo.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>Y</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+        <parameter>
+          <name>ID_EXECUCAO</name>
+          <value>${Internal.Workflow.ID}</value>
+          <stream_name/>
+        </parameter>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Gold dim conteudo</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>2832</xloc>
+      <yloc>112</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/gold_dim_usuario.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>Y</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+        <parameter>
+          <name>ID_EXECUCAO</name>
+          <value>${Internal.Workflow.ID}</value>
+          <stream_name/>
+        </parameter>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Gold dim usuario</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>3008</xloc>
+      <yloc>112</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/gold_fato_interacoes.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>Y</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+        <parameter>
+          <name>ID_EXECUCAO</name>
+          <value>${Internal.Workflow.ID}</value>
+          <stream_name/>
+        </parameter>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Gold fato interacoes</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>3184</xloc>
+      <yloc>112</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename>${PROJECT_HOME}/hop/pipelines/gold_fato_recomendacao.hpl</filename>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <create_parent_folder>N</create_parent_folder>
+      <set_logfile>N</set_logfile>
+      <set_append_logfile>N</set_append_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <wait_until_finished>Y</wait_until_finished>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+        <parameter>
+          <name>ID_EXECUCAO</name>
+          <value>${Internal.Workflow.ID}</value>
+          <stream_name/>
+        </parameter>
+      </parameters>
+      <run_configuration>local</run_configuration>
+      <name>Gold fato recomendacao</name>
+      <type>PIPELINE</type>
+      <attributes/>
+      <xloc>3360</xloc>
+      <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
     </action>
@@ -513,6 +658,13 @@
     </hop>
     <hop>
       <from>Criar tabelas qualidade</from>
+      <to>Criar tabelas gold</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Criar tabelas gold</from>
       <to>Bronze catalogo</to>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
@@ -583,6 +735,34 @@
     </hop>
     <hop>
       <from>Criticos aprovados</from>
+      <to>Gold dim conteudo</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Gold dim conteudo</from>
+      <to>Gold dim usuario</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Gold dim usuario</from>
+      <to>Gold fato interacoes</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Gold fato interacoes</from>
+      <to>Gold fato recomendacao</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Gold fato recomendacao</from>
       <to>Alertas aprovados</to>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
@@ -725,6 +905,41 @@
       <from>Log ressalvas</from>
       <to>Success</to>
       <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Criar tabelas gold</from>
+      <to>Log erro</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Gold dim conteudo</from>
+      <to>Log erro</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Gold dim usuario</from>
+      <to>Log erro</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Gold fato interacoes</from>
+      <to>Log erro</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Gold fato recomendacao</from>
+      <to>Log erro</to>
+      <evaluation>N</evaluation>
       <unconditional>N</unconditional>
       <enabled>Y</enabled>
     </hop>

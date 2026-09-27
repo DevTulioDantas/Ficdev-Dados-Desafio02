@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info>
+    <pipeline_version/>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
+    <pipeline_type>Normal</pipeline_type>
+    <pipeline_status>0</pipeline_status>
+    <parameters>
+      <parameter>
+        <name>ID_EXECUCAO</name>
+        <description>Identificador da execução, recebido do workflow</description>
+        <default_value>manual</default_value>
+      </parameter>
+    </parameters>
+    <name>gold_fato_recomendacao</name>
+    <name_sync_with_filename>Y</name_sync_with_filename>
+    <description>Carga do fato de recomendacoes do lote mais recente, com indicador de conversao</description>
+    <extended_description/>
+    <created_user>-</created_user>
+    <modified_user>-</modified_user>
+    <created_date>2026/09/27 13:30:00.000</created_date>
+    <modified_date>2026/09/27 13:30:00.000</modified_date>
+  </info>
+  <transform>
+    <type>TableInput</type>
+    <name>Ler recomendacoes lote recente</name>
+    <sql>WITH lote_mais_recente AS (
+  SELECT MAX(data_geracao) AS data_geracao
+  FROM silver.recomendacao
+)
+SELECT r.usuario_id
+     , r.posicao
+     , r.conteudo_id
+     , r.recomendacao_id
+     , r.pontuacao
+     , r.status
+     , r.data_geracao
+     , (pos.primeira_interacao IS NOT NULL) AS convertida
+     , pos.primeira_interacao               AS data_primeira_interacao_pos
+FROM silver.recomendacao r
+JOIN lote_mais_recente l ON l.data_geracao = r.data_geracao
+LEFT JOIN LATERAL (
+  SELECT MIN(i.data_hora) AS primeira_interacao
+  FROM silver.interacoes_usuarios i
+  WHERE i.usuario_id  = r.usuario_id
+    AND i.conteudo_id = r.conteudo_id
+    AND i.data_hora  &gt;= r.data_geracao
+) pos ON TRUE</sql>
+    <limit>0</limit>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <connection>pg_desafio</connection>
+    <lookup/>
+    <sql_from_file/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>128</xloc>
+      <yloc>112</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
+  <transform>
+    <type>SystemInfo</type>
+    <name>Data hora processamento</name>
+    <fields>
+      <field>
+        <name>data_hora_processamento</name>
+        <type>system date (fixed)</type>
+      </field>
+    </fields>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>352</xloc>
+      <yloc>112</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
+  <transform>
+    <type>GetVariable</type>
+    <name>Execucao gold</name>
+    <fields>
+      <field>
+        <name>id_execucao</name>
+        <variable>${ID_EXECUCAO}</variable>
+        <type>String</type>
+        <format/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <currency/>
+        <decimal/>
+        <group/>
+        <trim_type>none</trim_type>
+      </field>
+    </fields>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>576</xloc>
+      <yloc>112</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
+  <transform>
+    <type>TableOutput</type>
+    <name>Gravar gold fato_recomendacao</name>
+    <connection>pg_desafio</connection>
+    <schema>gold</schema>
+    <table>fato_recomendacao</table>
+    <commit>1000</commit>
+    <truncate>Y</truncate>
+    <only_when_have_rows>N</only_when_have_rows>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <specify_fields>N</specify_fields>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <add_columns>N</add_columns>
+    <drop_columns>N</drop_columns>
+    <change_column_types>N</change_column_types>
+    <fields/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>800</xloc>
+      <yloc>112</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
+  <order>
+    <hop>
+      <from>Ler recomendacoes lote recente</from>
+      <to>Data hora processamento</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Data hora processamento</from>
+      <to>Execucao gold</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Execucao gold</from>
+      <to>Gravar gold fato_recomendacao</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <notepads/>
+  <attributes/>
+  <transform_error_handling/>
+</pipeline>
