@@ -4,7 +4,7 @@
 --
 -- Silver: tipos definidos, chave primária = chave de negócio usada na
 -- deduplicação do pipeline. Sem FOREIGN KEY de propósito: o truncate
--- de uma tabela referenciada seria recusado; a integridade referencial
+-- de uma tabela referenciada seria recusado, a integridade referencial
 -- é garantida pelas regras de validação do Hop (INT02, COM02, REC03).
 --
 -- Quarentena: campos originais como TEXT (o registro chega como estava)

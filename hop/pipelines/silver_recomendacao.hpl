@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <pipeline>
   <info>
-    <pipeline_version />
+    <pipeline_version/>
     <capture_transform_performance>N</capture_transform_performance>
     <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
     <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
@@ -16,8 +16,8 @@
     </parameters>
     <name>silver_recomendacao</name>
     <name_sync_with_filename>Y</name_sync_with_filename>
-    <description />
-    <extended_description />
+    <description/>
+    <extended_description/>
     <created_user>-</created_user>
     <modified_user>-</modified_user>
     <created_date>2026/09/26 14:17:27.063</created_date>
@@ -38,8 +38,8 @@
     <execute_each_row>N</execute_each_row>
     <variables_active>N</variables_active>
     <connection>pg_desafio</connection>
-    <lookup />
-    <sql_from_file />
+    <lookup/>
+    <sql_from_file/>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
@@ -48,9 +48,9 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>StringOperations</type>
@@ -58,7 +58,7 @@
     <fields>
       <field>
         <in_stream_name>recomendacao_id</in_stream_name>
-        <out_stream_name />
+        <out_stream_name/>
         <trim_type>both</trim_type>
         <lower_upper>none</lower_upper>
         <init_cap>no</init_cap>
@@ -66,12 +66,12 @@
         <digits>none</digits>
         <remove_special_characters>none</remove_special_characters>
         <padding_type>none</padding_type>
-        <pad_len />
-        <pad_char />
+        <pad_len/>
+        <pad_char/>
       </field>
       <field>
         <in_stream_name>usuario_id</in_stream_name>
-        <out_stream_name />
+        <out_stream_name/>
         <trim_type>both</trim_type>
         <lower_upper>none</lower_upper>
         <init_cap>no</init_cap>
@@ -79,12 +79,12 @@
         <digits>none</digits>
         <remove_special_characters>none</remove_special_characters>
         <padding_type>none</padding_type>
-        <pad_len />
-        <pad_char />
+        <pad_len/>
+        <pad_char/>
       </field>
       <field>
         <in_stream_name>conteudo_id</in_stream_name>
-        <out_stream_name />
+        <out_stream_name/>
         <trim_type>both</trim_type>
         <lower_upper>none</lower_upper>
         <init_cap>no</init_cap>
@@ -92,12 +92,12 @@
         <digits>none</digits>
         <remove_special_characters>none</remove_special_characters>
         <padding_type>none</padding_type>
-        <pad_len />
-        <pad_char />
+        <pad_len/>
+        <pad_char/>
       </field>
       <field>
         <in_stream_name>pontuacao</in_stream_name>
-        <out_stream_name />
+        <out_stream_name/>
         <trim_type>both</trim_type>
         <lower_upper>none</lower_upper>
         <init_cap>no</init_cap>
@@ -105,12 +105,12 @@
         <digits>none</digits>
         <remove_special_characters>none</remove_special_characters>
         <padding_type>none</padding_type>
-        <pad_len />
-        <pad_char />
+        <pad_len/>
+        <pad_char/>
       </field>
       <field>
         <in_stream_name>posicao</in_stream_name>
-        <out_stream_name />
+        <out_stream_name/>
         <trim_type>both</trim_type>
         <lower_upper>none</lower_upper>
         <init_cap>no</init_cap>
@@ -118,12 +118,12 @@
         <digits>none</digits>
         <remove_special_characters>none</remove_special_characters>
         <padding_type>none</padding_type>
-        <pad_len />
-        <pad_char />
+        <pad_len/>
+        <pad_char/>
       </field>
       <field>
         <in_stream_name>status</in_stream_name>
-        <out_stream_name />
+        <out_stream_name/>
         <trim_type>both</trim_type>
         <lower_upper>none</lower_upper>
         <init_cap>no</init_cap>
@@ -131,8 +131,8 @@
         <digits>none</digits>
         <remove_special_characters>none</remove_special_characters>
         <padding_type>none</padding_type>
-        <pad_len />
-        <pad_char />
+        <pad_len/>
+        <pad_char/>
       </field>
     </fields>
     <distribute>Y</distribute>
@@ -143,9 +143,9 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>Validator</type>
@@ -153,163 +153,163 @@
     <validator_field>
       <validation_name>id_valido</validation_name>
       <name>recomendacao_id</name>
-      <max_length />
-      <min_length />
+      <max_length/>
+      <min_length/>
       <null_allowed>N</null_allowed>
       <only_null_allowed>N</only_null_allowed>
       <only_numeric_allowed>N</only_numeric_allowed>
-      <data_type />
+      <data_type/>
       <data_type_verified>N</data_type_verified>
-      <conversion_mask />
-      <decimal_symbol />
-      <grouping_symbol />
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
       <is_sourcing_values>N</is_sourcing_values>
-      <sourcing_field />
-      <min_value />
-      <max_value />
-      <start_string />
-      <start_string_not_allowed />
-      <end_string />
-      <end_string_not_allowed />
+      <sourcing_field/>
+      <min_value/>
+      <max_value/>
+      <start_string/>
+      <start_string_not_allowed/>
+      <end_string/>
+      <end_string_not_allowed/>
       <regular_expression>^[0-9]+$</regular_expression>
-      <regular_expression_not_allowed />
+      <regular_expression_not_allowed/>
       <error_code>REC01</error_code>
       <error_description>recomendacao_id vazio ou nao numerico</error_description>
-      <allowed_value />
+      <allowed_value/>
     </validator_field>
     <validator_field>
       <validation_name>usuario_existe</validation_name>
       <name>usuario_id</name>
-      <max_length />
-      <min_length />
+      <max_length/>
+      <min_length/>
       <null_allowed>N</null_allowed>
       <only_null_allowed>N</only_null_allowed>
       <only_numeric_allowed>N</only_numeric_allowed>
       <data_type>String</data_type>
       <data_type_verified>N</data_type_verified>
-      <conversion_mask />
-      <decimal_symbol />
-      <grouping_symbol />
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
       <is_sourcing_values>Y</is_sourcing_values>
       <sourcing_transform>Ref usuario</sourcing_transform>
       <sourcing_field>usuario_id_ref</sourcing_field>
-      <min_value />
-      <max_value />
-      <start_string />
-      <start_string_not_allowed />
-      <end_string />
-      <end_string_not_allowed />
-      <regular_expression />
-      <regular_expression_not_allowed />
+      <min_value/>
+      <max_value/>
+      <start_string/>
+      <start_string_not_allowed/>
+      <end_string/>
+      <end_string_not_allowed/>
+      <regular_expression/>
+      <regular_expression_not_allowed/>
       <error_code>REC02</error_code>
       <error_description>usuario_id inexistente no cadastro de usuarios</error_description>
-      <allowed_value />
+      <allowed_value/>
     </validator_field>
     <validator_field>
       <validation_name>conteudo_existe</validation_name>
       <name>conteudo_id</name>
-      <max_length />
-      <min_length />
+      <max_length/>
+      <min_length/>
       <null_allowed>N</null_allowed>
       <only_null_allowed>N</only_null_allowed>
       <only_numeric_allowed>N</only_numeric_allowed>
       <data_type>String</data_type>
       <data_type_verified>N</data_type_verified>
-      <conversion_mask />
-      <decimal_symbol />
-      <grouping_symbol />
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
       <is_sourcing_values>Y</is_sourcing_values>
       <sourcing_transform>Ref conteudos</sourcing_transform>
       <sourcing_field>conteudo_id_ref</sourcing_field>
-      <min_value />
-      <max_value />
-      <start_string />
-      <start_string_not_allowed />
-      <end_string />
-      <end_string_not_allowed />
-      <regular_expression />
-      <regular_expression_not_allowed />
+      <min_value/>
+      <max_value/>
+      <start_string/>
+      <start_string_not_allowed/>
+      <end_string/>
+      <end_string_not_allowed/>
+      <regular_expression/>
+      <regular_expression_not_allowed/>
       <error_code>REC03</error_code>
       <error_description>conteudo_id inexistente no catalogo (silver)</error_description>
-      <allowed_value />
+      <allowed_value/>
     </validator_field>
     <validator_field>
       <validation_name>pontuacao_valida</validation_name>
       <name>pontuacao</name>
-      <max_length />
-      <min_length />
+      <max_length/>
+      <min_length/>
       <null_allowed>N</null_allowed>
       <only_null_allowed>N</only_null_allowed>
       <only_numeric_allowed>N</only_numeric_allowed>
-      <data_type />
+      <data_type/>
       <data_type_verified>N</data_type_verified>
-      <conversion_mask />
-      <decimal_symbol />
-      <grouping_symbol />
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
       <is_sourcing_values>N</is_sourcing_values>
-      <sourcing_field />
-      <min_value />
-      <max_value />
-      <start_string />
-      <start_string_not_allowed />
-      <end_string />
-      <end_string_not_allowed />
+      <sourcing_field/>
+      <min_value/>
+      <max_value/>
+      <start_string/>
+      <start_string_not_allowed/>
+      <end_string/>
+      <end_string_not_allowed/>
       <regular_expression>^(100(\.0+)?|[0-9]{1,2}(\.[0-9]+)?)$</regular_expression>
-      <regular_expression_not_allowed />
+      <regular_expression_not_allowed/>
       <error_code>REC04</error_code>
       <error_description>pontuacao fora do intervalo 0-100</error_description>
-      <allowed_value />
+      <allowed_value/>
     </validator_field>
     <validator_field>
       <validation_name>posicao_valida</validation_name>
       <name>posicao</name>
-      <max_length />
-      <min_length />
+      <max_length/>
+      <min_length/>
       <null_allowed>N</null_allowed>
       <only_null_allowed>N</only_null_allowed>
       <only_numeric_allowed>N</only_numeric_allowed>
-      <data_type />
+      <data_type/>
       <data_type_verified>N</data_type_verified>
-      <conversion_mask />
-      <decimal_symbol />
-      <grouping_symbol />
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
       <is_sourcing_values>N</is_sourcing_values>
-      <sourcing_field />
-      <min_value />
-      <max_value />
-      <start_string />
-      <start_string_not_allowed />
-      <end_string />
-      <end_string_not_allowed />
+      <sourcing_field/>
+      <min_value/>
+      <max_value/>
+      <start_string/>
+      <start_string_not_allowed/>
+      <end_string/>
+      <end_string_not_allowed/>
       <regular_expression>^[1-5]$</regular_expression>
-      <regular_expression_not_allowed />
+      <regular_expression_not_allowed/>
       <error_code>REC05</error_code>
       <error_description>posicao fora de 1-5</error_description>
-      <allowed_value />
+      <allowed_value/>
     </validator_field>
     <validator_field>
       <validation_name>status_valido</validation_name>
       <name>status</name>
-      <max_length />
-      <min_length />
+      <max_length/>
+      <min_length/>
       <null_allowed>N</null_allowed>
       <only_null_allowed>N</only_null_allowed>
       <only_numeric_allowed>N</only_numeric_allowed>
       <data_type>String</data_type>
       <data_type_verified>N</data_type_verified>
-      <conversion_mask />
-      <decimal_symbol />
-      <grouping_symbol />
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
       <is_sourcing_values>N</is_sourcing_values>
-      <sourcing_field />
-      <min_value />
-      <max_value />
-      <start_string />
-      <start_string_not_allowed />
-      <end_string />
-      <end_string_not_allowed />
-      <regular_expression />
-      <regular_expression_not_allowed />
+      <sourcing_field/>
+      <min_value/>
+      <max_value/>
+      <start_string/>
+      <start_string_not_allowed/>
+      <end_string/>
+      <end_string_not_allowed/>
+      <regular_expression/>
+      <regular_expression_not_allowed/>
       <error_code>REC06</error_code>
       <error_description>status fora da lista permitida</error_description>
       <allowed_value>
@@ -321,29 +321,29 @@
     <validator_field>
       <validation_name>data_geracao_obrigatoria</validation_name>
       <name>data_geracao</name>
-      <max_length />
-      <min_length />
+      <max_length/>
+      <min_length/>
       <null_allowed>N</null_allowed>
       <only_null_allowed>N</only_null_allowed>
       <only_numeric_allowed>N</only_numeric_allowed>
-      <data_type />
+      <data_type/>
       <data_type_verified>N</data_type_verified>
-      <conversion_mask />
-      <decimal_symbol />
-      <grouping_symbol />
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
       <is_sourcing_values>N</is_sourcing_values>
-      <sourcing_field />
-      <min_value />
-      <max_value />
-      <start_string />
-      <start_string_not_allowed />
-      <end_string />
-      <end_string_not_allowed />
-      <regular_expression />
-      <regular_expression_not_allowed />
+      <sourcing_field/>
+      <min_value/>
+      <max_value/>
+      <start_string/>
+      <start_string_not_allowed/>
+      <end_string/>
+      <end_string_not_allowed/>
+      <regular_expression/>
+      <regular_expression_not_allowed/>
       <error_code>REC07</error_code>
       <error_description>data_geracao vazia</error_description>
-      <allowed_value />
+      <allowed_value/>
     </validator_field>
     <validate_all>Y</validate_all>
     <concat_errors>Y</concat_errors>
@@ -358,22 +358,22 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>Constant</type>
     <name>Origem do erro</name>
     <fields>
       <field>
-        <currency />
-        <decimal />
-        <group />
+        <currency/>
+        <decimal/>
+        <group/>
         <nullif>silver_recomendacao</nullif>
         <name>pipeline_origem</name>
         <type>String</type>
-        <format />
+        <format/>
         <length>-1</length>
         <precision>-1</precision>
         <set_empty_string>N</set_empty_string>
@@ -387,9 +387,9 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>SystemInfo</type>
@@ -408,9 +408,9 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>GetVariable</type>
@@ -420,12 +420,12 @@
         <name>id_execucao</name>
         <variable>${ID_EXECUCAO}</variable>
         <type>String</type>
-        <format />
+        <format/>
         <length>-1</length>
         <precision>-1</precision>
-        <currency />
-        <decimal />
-        <group />
+        <currency/>
+        <decimal/>
+        <group/>
         <trim_type>none</trim_type>
       </field>
     </fields>
@@ -437,9 +437,9 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>TableOutput</type>
@@ -453,21 +453,21 @@
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
     <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field />
+    <partitioning_field/>
     <partitioning_daily>N</partitioning_daily>
     <partitioning_monthly>Y</partitioning_monthly>
     <tablename_in_field>N</tablename_in_field>
-    <tablename_field />
+    <tablename_field/>
     <tablename_in_table>Y</tablename_in_table>
     <return_keys>N</return_keys>
-    <return_field />
+    <return_field/>
     <specify_fields>N</specify_fields>
     <auto_update_table_structure>N</auto_update_table_structure>
     <always_drop_and_recreate>N</always_drop_and_recreate>
     <add_columns>N</add_columns>
     <drop_columns>N</drop_columns>
     <change_column_types>N</change_column_types>
-    <fields />
+    <fields/>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
@@ -476,9 +476,9 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>SelectValues</type>
@@ -491,16 +491,16 @@
         <type>Integer</type>
         <length>-2</length>
         <precision>-2</precision>
-        <storage_type />
-        <conversion_mask />
+        <storage_type/>
+        <conversion_mask/>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale />
-        <date_format_timezone />
+        <date_format_locale/>
+        <date_format_timezone/>
         <lenient_string_to_number>N</lenient_string_to_number>
-        <decimal_symbol />
-        <grouping_symbol />
-        <currency_symbol />
-        <encoding />
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <encoding/>
         <roundingType>half_even</roundingType>
       </meta>
       <meta>
@@ -509,16 +509,16 @@
         <type>Integer</type>
         <length>-2</length>
         <precision>-2</precision>
-        <storage_type />
-        <conversion_mask />
+        <storage_type/>
+        <conversion_mask/>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale />
-        <date_format_timezone />
+        <date_format_locale/>
+        <date_format_timezone/>
         <lenient_string_to_number>N</lenient_string_to_number>
-        <decimal_symbol />
-        <grouping_symbol />
-        <currency_symbol />
-        <encoding />
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <encoding/>
         <roundingType>half_even</roundingType>
       </meta>
       <meta>
@@ -527,16 +527,16 @@
         <type>Integer</type>
         <length>-2</length>
         <precision>-2</precision>
-        <storage_type />
-        <conversion_mask />
+        <storage_type/>
+        <conversion_mask/>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale />
-        <date_format_timezone />
+        <date_format_locale/>
+        <date_format_timezone/>
         <lenient_string_to_number>N</lenient_string_to_number>
-        <decimal_symbol />
-        <grouping_symbol />
-        <currency_symbol />
-        <encoding />
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <encoding/>
         <roundingType>half_even</roundingType>
       </meta>
       <meta>
@@ -545,16 +545,16 @@
         <type>Number</type>
         <length>-2</length>
         <precision>-2</precision>
-        <storage_type />
-        <conversion_mask />
+        <storage_type/>
+        <conversion_mask/>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale />
-        <date_format_timezone />
+        <date_format_locale/>
+        <date_format_timezone/>
         <lenient_string_to_number>N</lenient_string_to_number>
         <decimal_symbol>.</decimal_symbol>
-        <grouping_symbol />
-        <currency_symbol />
-        <encoding />
+        <grouping_symbol/>
+        <currency_symbol/>
+        <encoding/>
         <roundingType>half_even</roundingType>
       </meta>
       <meta>
@@ -563,16 +563,16 @@
         <type>Integer</type>
         <length>-2</length>
         <precision>-2</precision>
-        <storage_type />
-        <conversion_mask />
+        <storage_type/>
+        <conversion_mask/>
         <date_format_lenient>N</date_format_lenient>
-        <date_format_locale />
-        <date_format_timezone />
+        <date_format_locale/>
+        <date_format_timezone/>
         <lenient_string_to_number>N</lenient_string_to_number>
-        <decimal_symbol />
-        <grouping_symbol />
-        <currency_symbol />
-        <encoding />
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <encoding/>
         <roundingType>half_even</roundingType>
       </meta>
     </fields>
@@ -584,9 +584,9 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>SortRows</type>
@@ -620,10 +620,10 @@
     <directory>${java.io.tmpdir}</directory>
     <sort_prefix>out</sort_prefix>
     <sort_size>1000000</sort_size>
-    <free_memory />
+    <free_memory/>
     <unique_rows>N</unique_rows>
     <compress>N</compress>
-    <compress_variables />
+    <compress_variables/>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
@@ -632,15 +632,15 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>Unique</type>
     <name>Deduplicar</name>
     <count_rows>N</count_rows>
-    <count_field />
+    <count_field/>
     <fields>
       <field>
         <name>data_geracao</name>
@@ -656,7 +656,7 @@
       </field>
     </fields>
     <reject_duplicate_row>N</reject_duplicate_row>
-    <error_description />
+    <error_description/>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
@@ -665,9 +665,9 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>SystemInfo</type>
@@ -681,14 +681,14 @@
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>544</yloc>
+      <xloc>1168</xloc>
+      <yloc>400</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>GetVariable</type>
@@ -698,26 +698,26 @@
         <name>id_execucao</name>
         <variable>${ID_EXECUCAO}</variable>
         <type>String</type>
-        <format />
+        <format/>
         <length>-1</length>
         <precision>-1</precision>
-        <currency />
-        <decimal />
-        <group />
+        <currency/>
+        <decimal/>
+        <group/>
         <trim_type>none</trim_type>
       </field>
     </fields>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>672</yloc>
+      <xloc>1328</xloc>
+      <yloc>400</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>TableOutput</type>
@@ -731,32 +731,32 @@
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
     <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field />
+    <partitioning_field/>
     <partitioning_daily>N</partitioning_daily>
     <partitioning_monthly>Y</partitioning_monthly>
     <tablename_in_field>N</tablename_in_field>
-    <tablename_field />
+    <tablename_field/>
     <tablename_in_table>Y</tablename_in_table>
     <return_keys>N</return_keys>
-    <return_field />
+    <return_field/>
     <specify_fields>N</specify_fields>
     <auto_update_table_structure>N</auto_update_table_structure>
     <always_drop_and_recreate>N</always_drop_and_recreate>
     <add_columns>N</add_columns>
     <drop_columns>N</drop_columns>
     <change_column_types>N</change_column_types>
-    <fields />
+    <fields/>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>800</yloc>
+      <xloc>1504</xloc>
+      <yloc>400</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>TableInput</type>
@@ -767,8 +767,8 @@
     <execute_each_row>N</execute_each_row>
     <variables_active>N</variables_active>
     <connection>pg_desafio</connection>
-    <lookup />
-    <sql_from_file />
+    <lookup/>
+    <sql_from_file/>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
@@ -777,9 +777,9 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <transform>
     <type>TableInput</type>
@@ -790,8 +790,8 @@
     <execute_each_row>N</execute_each_row>
     <variables_active>N</variables_active>
     <connection>pg_desafio</connection>
-    <lookup />
-    <sql_from_file />
+    <lookup/>
+    <sql_from_file/>
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
@@ -800,9 +800,9 @@
     </GUI>
     <partitioning>
       <method>none</method>
-      <schema_name />
+      <schema_name/>
     </partitioning>
-    <attributes />
+    <attributes/>
   </transform>
   <order>
     <hop>
@@ -881,8 +881,8 @@
       <enabled>Y</enabled>
     </hop>
   </order>
-  <notepads />
-  <attributes />
+  <notepads/>
+  <attributes/>
   <transform_error_handling>
     <error>
       <source_transform>Validar regras</source_transform>
@@ -892,9 +892,9 @@
       <descriptions_valuename>motivo_erro</descriptions_valuename>
       <fields_valuename>campo_erro</fields_valuename>
       <codes_valuename>codigo_erro</codes_valuename>
-      <max_errors />
-      <max_pct_errors />
-      <min_pct_rows />
+      <max_errors/>
+      <max_pct_errors/>
+      <min_pct_rows/>
     </error>
     <error>
       <source_transform>Converter tipos</source_transform>
@@ -904,9 +904,9 @@
       <descriptions_valuename>motivo_erro</descriptions_valuename>
       <fields_valuename>campo_erro</fields_valuename>
       <codes_valuename>codigo_erro</codes_valuename>
-      <max_errors />
-      <max_pct_errors />
-      <min_pct_rows />
+      <max_errors/>
+      <max_pct_errors/>
+      <min_pct_rows/>
     </error>
   </transform_error_handling>
 </pipeline>

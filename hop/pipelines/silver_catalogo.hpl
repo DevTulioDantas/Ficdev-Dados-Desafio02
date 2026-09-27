@@ -667,8 +667,8 @@
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>976</xloc>
-      <yloc>256</yloc>
+      <xloc>1168</xloc>
+      <yloc>112</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -696,8 +696,8 @@
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>976</xloc>
-      <yloc>384</yloc>
+      <xloc>1408</xloc>
+      <yloc>112</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -735,8 +735,8 @@
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>976</xloc>
-      <yloc>512</yloc>
+      <xloc>1648</xloc>
+      <yloc>112</yloc>
     </GUI>
     <partitioning>
       <method>none</method>

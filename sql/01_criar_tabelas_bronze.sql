@@ -3,12 +3,12 @@
 -- Idempotente (IF NOT EXISTS): pode rodar quantas vezes for preciso.
 --
 -- Regras da Bronze:
---  * cópia fiel da fonte, sem transformações destrutivas;
+--  * cópia fiel da fonte, sem transformações destrutivas,
 --  * campos vindos de ARQUIVO (CSV/JSON) ficam como TEXT — arquivo não
---    tem tipo; a conversão é responsabilidade da Silver;
---  * campos vindos de BANCO mantêm o tipo original da fonte;
+--    tem tipo, a conversão é responsabilidade da Silver,
+--  * campos vindos de BANCO mantêm o tipo original da fonte,
 --  * sem chave primária: duplicatas da fonte são preservadas e tratadas
---    na Silver;
+--    na Silver,
 --  * 3 campos de auditoria: origem, data_hora_ingestao, id_execucao.
 -- =====================================================================
 

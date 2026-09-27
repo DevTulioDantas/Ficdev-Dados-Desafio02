@@ -25,7 +25,7 @@
   </info>
   <transform>
     <type>TableInput</type>
-    <name>Ler bronze catalogo</name>
+    <name>Ler bronze interacoes</name>
     <sql>  SELECT usuario_id, conteudo_id, tipo_interacao, data_hora,
          tempo_consumido, percentual_conclusao, avaliacao_atribuida
   FROM bronze.interacoes_usuarios</sql>
@@ -459,7 +459,7 @@
     <schema>silver</schema>
     <table>rejeitados_interacoes</table>
     <commit>1000</commit>
-    <truncate>N</truncate>
+    <truncate>Y</truncate>
     <only_when_have_rows>N</only_when_have_rows>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
@@ -722,8 +722,8 @@
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>544</yloc>
+      <xloc>1168</xloc>
+      <yloc>400</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -751,8 +751,8 @@
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>672</yloc>
+      <xloc>1344</xloc>
+      <yloc>400</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -790,8 +790,8 @@
     <distribute>Y</distribute>
     <copies>1</copies>
     <GUI>
-      <xloc>1008</xloc>
-      <yloc>800</yloc>
+      <xloc>1552</xloc>
+      <yloc>400</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -847,7 +847,7 @@
   </transform>
   <order>
     <hop>
-      <from>Ler bronze catalogo</from>
+      <from>Ler bronze interacoes</from>
       <to>Limpar textos</to>
       <enabled>Y</enabled>
     </hop>
