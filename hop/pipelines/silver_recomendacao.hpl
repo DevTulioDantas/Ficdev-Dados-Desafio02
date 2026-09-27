@@ -404,7 +404,7 @@
     <copies>1</copies>
     <GUI>
       <xloc>592</xloc>
-      <yloc>640</yloc>
+      <yloc>864</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -433,7 +433,7 @@
     <copies>1</copies>
     <GUI>
       <xloc>592</xloc>
-      <yloc>752</yloc>
+      <yloc>976</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -472,7 +472,7 @@
     <copies>1</copies>
     <GUI>
       <xloc>592</xloc>
-      <yloc>864</yloc>
+      <yloc>1088</yloc>
     </GUI>
     <partitioning>
       <method>none</method>
@@ -804,6 +804,74 @@
     </partitioning>
     <attributes/>
   </transform>
+  <transform>
+    <type>ValueMapper</type>
+    <name>Padronizar codigo</name>
+    <field_to_use>codigo_erro</field_to_use>
+    <target_field/>
+    <non_match_default/>
+    <keep_original_value_on_non_match>Y</keep_original_value_on_non_match>
+    <target_type/>
+    <fields>
+      <field>
+        <source_value>SELECT001</source_value>
+        <target_value>REC08</target_value>
+        <empty_string_equals_null>Y</empty_string_equals_null>
+      </field>
+    </fields>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>592</xloc>
+      <yloc>640</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
+  <transform>
+    <type>ReplaceString</type>
+    <name>Limpar mensagem</name>
+    <fields>
+      <field>
+        <in_stream_name>motivo_erro</in_stream_name>
+        <out_stream_name/>
+        <use_regex>Y</use_regex>
+        <replace_string>^\s+|\s+$</replace_string>
+        <replace_by_string/>
+        <set_empty_string>N</set_empty_string>
+        <replace_field_by_string/>
+        <whole_word>N</whole_word>
+        <case_sensitive>N</case_sensitive>
+        <is_unicode>N</is_unicode>
+      </field>
+      <field>
+        <in_stream_name>motivo_erro</in_stream_name>
+        <out_stream_name/>
+        <use_regex>Y</use_regex>
+        <replace_string>\s*[\r\n]+\s*</replace_string>
+        <replace_by_string>;</replace_by_string>
+        <set_empty_string>N</set_empty_string>
+        <replace_field_by_string/>
+        <whole_word>N</whole_word>
+        <case_sensitive>N</case_sensitive>
+        <is_unicode>N</is_unicode>
+      </field>
+    </fields>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+    <GUI>
+      <xloc>592</xloc>
+      <yloc>752</yloc>
+    </GUI>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+  </transform>
   <order>
     <hop>
       <from>Ler bronze recomendacao</from>
@@ -822,6 +890,16 @@
     </hop>
     <hop>
       <from>Origem do erro</from>
+      <to>Padronizar codigo</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Padronizar codigo</from>
+      <to>Limpar mensagem</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Limpar mensagem</from>
       <to>Data hora rejeicao</to>
       <enabled>Y</enabled>
     </hop>
