@@ -79,6 +79,40 @@
       <attributes_hac/>
     </action>
     <action>
+      <sql/>
+      <connection>pg_desafio</connection>
+      <useVariableSubstitution>N</useVariableSubstitution>
+      <sqlfromfile>Y</sqlfromfile>
+      <sqlfilename>${PROJECT_HOME}/sql/03_criar_tabelas_qualidade.sql</sqlfilename>
+      <sqlfilename_encoding/>
+      <sendOneStatement>N</sendOneStatement>
+      <name>Criar tabelas qualidade</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <xloc>688</xloc>
+      <yloc>112</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <sql/>
+      <connection>pg_desafio</connection>
+      <useVariableSubstitution>Y</useVariableSubstitution>
+      <sqlfromfile>Y</sqlfromfile>
+      <sqlfilename>${PROJECT_HOME}/sql/04_executar_testes_qualidade.sql</sqlfilename>
+      <sqlfilename_encoding/>
+      <sendOneStatement>N</sendOneStatement>
+      <name>Testes de qualidade</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <xloc>2304</xloc>
+      <yloc>112</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
       <filename>${PROJECT_HOME}/hop/pipelines/bronze_catalogo_csv.hpl</filename>
       <params_from_previous>N</params_from_previous>
       <exec_per_row>N</exec_per_row>
@@ -105,7 +139,7 @@
       <name>Bronze catalogo</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>688</xloc>
+      <xloc>864</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -137,7 +171,7 @@
       <name>Bronze interacoes</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>864</xloc>
+      <xloc>1040</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -169,7 +203,7 @@
       <name>Bronze comentarios</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1040</xloc>
+      <xloc>1216</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -201,7 +235,7 @@
       <name>Bronze recomendacao</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1232</xloc>
+      <xloc>1408</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -233,7 +267,7 @@
       <name>Silver catalogo</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1424</xloc>
+      <xloc>1600</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -265,7 +299,7 @@
       <name>Silver interacoes</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1600</xloc>
+      <xloc>1776</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -297,7 +331,7 @@
       <name>Silver recomendacao</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1952</xloc>
+      <xloc>2128</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -329,7 +363,7 @@
       <name>Silver comentarios</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>1776</xloc>
+      <xloc>1952</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -342,7 +376,7 @@
       <description/>
       <type>WRITE_TO_LOG</type>
       <attributes/>
-      <xloc>2160</xloc>
+      <xloc>2832</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -352,13 +386,13 @@
       <description/>
       <type>SUCCESS</type>
       <attributes/>
-      <xloc>2288</xloc>
+      <xloc>3008</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
     </action>
     <action>
-      <loglevel>Basic</loglevel>
+      <loglevel>Error</loglevel>
       <logsubject>Carga completa</logsubject>
       <logmessage>FALHA na carga completa. Verifique a última action executada no log. ID_EXECUCAO=${Internal.Workflow.ID}</logmessage>
       <name>Log erro</name>
@@ -378,6 +412,72 @@
       <attributes/>
       <xloc>1376</xloc>
       <yloc>384</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <add_rows_result>N</add_rows_result>
+      <clear_result_rows>Y</clear_result_rows>
+      <is_usevars>Y</is_usevars>
+      <is_custom_sql>Y</is_custom_sql>
+      <custom_sql>SELECT teste_id FROM qualidade.resultados_testes WHERE id_execucao = '${Internal.Workflow.ID}' AND severidade = 'CRITICA' AND resultado = 'REPROVADO'</custom_sql>
+      <connection>pg_desafio</connection>
+      <tablename/>
+      <schemaname/>
+      <limit>0</limit>
+      <success_condition>rows_count_equal</success_condition>
+      <name>Criticos aprovados</name>
+      <description/>
+      <type>EVAL_TABLE_CONTENT</type>
+      <attributes/>
+      <xloc>2480</xloc>
+      <yloc>112</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <add_rows_result>N</add_rows_result>
+      <clear_result_rows>Y</clear_result_rows>
+      <is_usevars>Y</is_usevars>
+      <is_custom_sql>Y</is_custom_sql>
+      <custom_sql>SELECT teste_id FROM qualidade.resultados_testes WHERE id_execucao = '${Internal.Workflow.ID}' AND severidade = 'ALERTA' AND resultado = 'REPROVADO'</custom_sql>
+      <connection>pg_desafio</connection>
+      <tablename/>
+      <schemaname/>
+      <limit>0</limit>
+      <success_condition>rows_count_equal</success_condition>
+      <name>Alertas aprovados</name>
+      <description/>
+      <type>EVAL_TABLE_CONTENT</type>
+      <attributes/>
+      <xloc>2656</xloc>
+      <yloc>112</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <loglevel>Basic</loglevel>
+      <logsubject>Carga completa</logsubject>
+      <logmessage>Carga completa finalizada COM RESSALVAS: teste(s) de qualidade de severidade ALERTA reprovado(s). Consulte qualidade.resultados_testes. ID_EXECUCAO=${Internal.Workflow.ID}</logmessage>
+      <name>Log ressalvas</name>
+      <description/>
+      <type>WRITE_TO_LOG</type>
+      <attributes/>
+      <xloc>2832</xloc>
+      <yloc>256</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <loglevel>Error</loglevel>
+      <logsubject>Carga completa</logsubject>
+      <logmessage>FALHA DE QUALIDADE: teste(s) CRITICO(s) reprovado(s). A camada Gold NAO foi publicada. Consulte qualidade.resultados_testes. ID_EXECUCAO=${Internal.Workflow.ID}</logmessage>
+      <name>Log bloqueio qualidade</name>
+      <description/>
+      <type>WRITE_TO_LOG</type>
+      <attributes/>
+      <xloc>2480</xloc>
+      <yloc>256</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
     </action>
@@ -406,6 +506,13 @@
     </hop>
     <hop>
       <from>Criar tabelas silver</from>
+      <to>Criar tabelas qualidade</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Criar tabelas qualidade</from>
       <to>Bronze catalogo</to>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
@@ -462,6 +569,27 @@
     </hop>
     <hop>
       <from>Silver recomendacao</from>
+      <to>Testes de qualidade</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Testes de qualidade</from>
+      <to>Criticos aprovados</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Criticos aprovados</from>
+      <to>Alertas aprovados</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Alertas aprovados</from>
       <to>Log suesso</to>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
@@ -555,6 +683,48 @@
       <from>Silver recomendacao</from>
       <to>Log erro</to>
       <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Criar tabelas qualidade</from>
+      <to>Log erro</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Testes de qualidade</from>
+      <to>Log erro</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Criticos aprovados</from>
+      <to>Log bloqueio qualidade</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Log bloqueio qualidade</from>
+      <to>Abort workflow</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Alertas aprovados</from>
+      <to>Log ressalvas</to>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Log ressalvas</from>
+      <to>Success</to>
+      <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
       <enabled>Y</enabled>
     </hop>
