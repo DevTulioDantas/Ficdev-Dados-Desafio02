@@ -1,0 +1,17 @@
+﻿ conteudo_id | qtd_erros |  codigo_erro  |          campo_erro           |                                                                  motivo_erro                                                                   | pipeline_origem |   data_hora_rejeicao    | id_execucao 
+-------------+-----------+---------------+-------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+-------------------------+-------------
+ 2001        |         2 | CAT04 | CAT06 | categoria | carga_horaria_min | categoria fora da lista permitida | carga_horaria_min nao e um inteiro positivo                                                                | silver_catalogo | 2026-09-27 12:11:00.703 | manual
+ 2002        |         1 | CAT08         | data_publicacao               | data_publicacao String(2147483647) : couldn't convert string [2025-02-30] to a date using format [yyyy-MM-dd] on offset location 10;2025-02-30 | silver_catalogo | 2026-09-27 12:11:00.703 | manual
+ X12         |         2 | CAT01 | CAT03 | conteudo_id | tipo            | conteudo_id vazio ou nao numerico | tipo fora da lista permitida                                                                               | silver_catalogo | 2026-09-27 12:11:00.703 | manual
+(3 rows)
+
+ total_silver | registros_de_teste 
+--------------+--------------------
+         1000 |                  0
+(1 row)
+
+ lidos_bronze | aprovados_silver | rejeitados | duplicatas_descartadas 
+--------------+------------------+------------+------------------------
+         1004 |             1000 |          3 |                      1
+(1 row)
+
