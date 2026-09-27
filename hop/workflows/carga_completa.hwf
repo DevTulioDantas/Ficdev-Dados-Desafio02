@@ -271,7 +271,7 @@
       <attributes_hac/>
     </action>
     <action>
-      <filename>aaaa</filename>
+      <filename>${PROJECT_HOME}/hop/pipelines/silver_recomendacao_TESTE_FALHA.hpl</filename>
       <params_from_previous>N</params_from_previous>
       <exec_per_row>N</exec_per_row>
       <clear_rows>N</clear_rows>
