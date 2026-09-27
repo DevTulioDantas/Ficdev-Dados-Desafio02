@@ -1,0 +1,31 @@
+{
+  "engineRunConfiguration": {
+    "BeamSparkPipelineEngine": {
+      "sparkMinReadTimeMillis": "",
+      "sparkMaster": "local[*]",
+      "sparkEnableSparkMetricSinks": false,
+      "streamingHopTransformsBufferSize": "500",
+      "sparkAppName": "",
+      "sparkCheckpointDir": "",
+      "sparkMaxRecordsPerBatch": "",
+      "userAgent": "Hop",
+      "sparkBatchIntervalMillis": "",
+      "azureBlobStorageEndpoint": "",
+      "azureBlobStorageKey": "",
+      "tempLocation": "C:\\Users\\tulio\\AppData\\Local\\Temp\\",
+      "sparkCheckpointDurationMillis": "",
+      "fatJar": "",
+      "sparkBundleSize": "",
+      "sparkReadTimePercentage": "",
+      "streamingHopTransformsFlushInterval": "-1",
+      "azureBlobStorageAccount": ""
+    }
+  },
+  "virtualPath": "",
+  "defaultSelection": false,
+  "configurationVariables": [],
+  "name": "spark-local",
+  "description": "Apache Beam - Spark Runner em modo local",
+  "dataProfile": "",
+  "executionInfoLocationName": ""
+}

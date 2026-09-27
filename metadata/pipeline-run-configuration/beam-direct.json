@@ -1,0 +1,19 @@
+{
+  "engineRunConfiguration": {
+    "BeamDirectPipelineEngine": {
+      "tempLocation": "file://C:\\Users\\tulio\\AppData\\Local\\Temp\\",
+      "streamingHopTransformsBufferSize": "",
+      "fatJar": "",
+      "number_of_workers": "1",
+      "userAgent": "Hop",
+      "streamingHopTransformsFlushInterval": ""
+    }
+  },
+  "virtualPath": "",
+  "defaultSelection": false,
+  "configurationVariables": [],
+  "name": "beam-direct",
+  "description": "Apache Beam - Direct Runner",
+  "dataProfile": "",
+  "executionInfoLocationName": ""
+}
