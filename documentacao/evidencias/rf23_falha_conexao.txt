@@ -1,0 +1,10 @@
+﻿2026/09/27 12:33:37 - carga_completa - Finished action [Start] (result=[true])
+2026/09/27 12:33:37 - Criar schemas - ERROR: An error occurred executing this action : 
+2026/09/27 12:33:37 - Criar schemas - Error occurred while trying to connect to the database
+2026/09/27 12:33:37 - Criar schemas - Error connecting to database: (using class org.postgresql.Driver)
+2026/09/27 12:33:37 - Criar schemas - Connection to localhost:5432 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+2026/09/27 12:33:37 - carga_completa - Finished action [Criar schemas] (result=[false])
+2026/09/27 12:33:37 - Carga completa - FALHA na carga completa. Verifique a �ltima action executada no log. ID_EXECUCAO=be0a5bf5-681c-4594-b376-c5e5a11282ea
+2026/09/27 12:33:37 - carga_completa - Finished action [Log erro] (result=[true])
+2026/09/27 12:33:37 - Abort workflow - ERROR: Aborting workflow.
+2026/09/27 12:33:37 - carga_completa - Finished action [Abort workflow] (result=[false])
