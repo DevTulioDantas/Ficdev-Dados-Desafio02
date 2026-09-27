@@ -1,0 +1,15 @@
+﻿ conteudo_id | qtd_erros |  codigo_erro  |     campo_erro     |                           motivo_erro                            | pipeline_origem |   data_hora_rejeicao    | id_execucao 
+-------------+-----------+---------------+--------------------+------------------------------------------------------------------+-----------------+-------------------------+-------------
+ X12         |         2 | CAT01 | CAT03 | conteudo_id | tipo | conteudo_id vazio ou nao numerico | tipo fora da lista permitida | silver_catalogo | 2026-09-27 12:37:43.719 | manual
+(1 row)
+
+ total_silver | registros_de_teste 
+--------------+--------------------
+         1002 |                  2
+(1 row)
+
+ lidos_bronze | aprovados_silver | rejeitados | duplicatas_descartadas 
+--------------+------------------+------------+------------------------
+         1003 |             1002 |          1 |                      0
+(1 row)
+
