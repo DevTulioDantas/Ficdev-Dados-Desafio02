@@ -1,0 +1,14 @@
+{
+  "virtualPath": "",
+  "logLevel": "ERROR",
+  "failParentOnLoggingFailure": false,
+  "loggingParentsOnly": true,
+  "name": "log_carga_completa",
+  "workflowToLog": [],
+  "intervalInSeconds": "30",
+  "executingPeriodically": false,
+  "pipelineFilename": "${PROJECT_HOME}/hop/pipelines/log_etapas.hpl",
+  "executingAtEnd": true,
+  "enabled": true,
+  "executingAtStart": false
+}
