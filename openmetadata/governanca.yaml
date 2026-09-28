@@ -1,0 +1,490 @@
+# =====================================================================
+# Governança "como código" do Desafio 2 (RF27, RF28, RF29, RF32)
+#
+# Este arquivo é a FONTE DA VERDADE dos metadados de negócio:
+# responsáveis, descrições, glossário, classificações e linhagem manual.
+# O script publicar_metadados.py aplica tudo no OpenMetadata (idempotente:
+# pode rodar quantas vezes quiser). Editou aqui -> rode o script de novo.
+#
+# Metadados TÉCNICOS (colunas, tipos, views) NÃO ficam aqui: vêm da
+# ingestão automática do PostgreSQL (ingestao/postgres_desafio.yaml).
+#
+# Ativos que ainda não existem no catálogo (ex.: tabelas Gold ainda não
+# criadas) são apenas avisados e pulados — rode de novo depois.
+# =====================================================================
+
+servico_banco: pg_desafio          # serviceName da ingestão do PostgreSQL
+banco: desafio_dados
+
+# ---------------------------------------------------------------------
+# Responsáveis (RF27, RF28) — e-mails fictícios
+# ---------------------------------------------------------------------
+usuarios:
+  - nome: tulio.dantas
+    exibicao: Túlio Dantas
+    email: tulio.dantas@ficdev.example
+  - nome: gabriele.silva
+    exibicao: Gabriele Silva
+    email: gabriele.silva@ficdev.example
+  - nome: libia.canete
+    exibicao: Libia Canete
+    email: libia.canete@ficdev.example
+
+equipe:
+  nome: equipe_dados_ficdev
+  exibicao: Equipe de Dados FIC_DEV
+  descricao: Equipe responsável pelo pipeline governado de conteúdos educacionais (Desafio 2).
+
+# ---------------------------------------------------------------------
+# Classificações (RF28, RF32)
+# Além destas, usamos as nativas do OpenMetadata:
+#   PII.Sensitive / PII.NonSensitive / PII.None  e  Tier.Tier1..Tier5
+# ---------------------------------------------------------------------
+classificacoes:
+  - nome: LGPD
+    descricao: >-
+      Classificação dos campos conforme a LGPD (Lei 13.709/2018).
+      Todos os dados do desafio são FICTÍCIOS.
+    mutuamente_exclusiva: true
+    tags:
+      - nome: DadoPessoal
+        descricao: "Identifica ou torna identificável uma pessoa natural (art. 5º, I). Ex.: nome do autor."
+      - nome: DadoPessoalSensivel
+        descricao: Origem racial, saúde, religião, biometria etc. (art. 5º, II). Nenhum campo do desafio se enquadra.
+      - nome: IdentificadorIndireto
+        descricao: "Isoladamente não identifica, mas permite associação/reidentificação quando combinado (ex.: usuario_id)."
+      - nome: TextoLivre
+        descricao: "Campo aberto digitado pelo usuário; pode conter dado pessoal inserido espontaneamente (ex.: comentário)."
+      - nome: Pseudonimizado
+        descricao: Valor substituído por pseudônimo; associação possível apenas com a tabela de correspondência (fora do repositório).
+      - nome: Mascarado
+        descricao: Valor exibido parcialmente ocultado para consumo (dashboard).
+      - nome: HashComSalt
+        descricao: Hash irreversível com salt secreto, usado só para comparação.
+      - nome: NaoPessoal
+        descricao: Campo sem relação com pessoa natural.
+  - nome: Camada
+    descricao: Camada da arquitetura medallion a que o ativo pertence.
+    mutuamente_exclusiva: true
+    tags:
+      - nome: Fonte
+        descricao: Dado original do Desafio 1 (somente leitura).
+      - nome: Bronze
+        descricao: Cópia auditável, sem transformações destrutivas, com campos de auditoria.
+      - nome: Silver
+        descricao: Dado padronizado, validado, deduplicado e separado da quarentena.
+      - nome: Quarentena
+        descricao: Registros reprovados nas regras da Silver, com diagnóstico do erro, aguardando correção e reprocessamento.
+      - nome: Gold
+        descricao: Tabelas e visões orientadas aos KPIs; única camada consultada pelo dashboard.
+      - nome: Qualidade
+        descricao: Regras e resultados dos testes de qualidade por execução.
+
+# ---------------------------------------------------------------------
+# Glossário de negócio (RF28) — definição, regra de cálculo e responsável
+# ---------------------------------------------------------------------
+glossario:
+  nome: GlossarioEducacional
+  exibicao: Glossário da Plataforma Educacional
+  descricao: Termos de negócio usados nos KPIs e no dashboard da plataforma educacional fictícia.
+  dono: libia.canete
+  termos:
+    - nome: UsuarioAtivo
+      exibicao: Usuário ativo
+      dono: libia.canete
+      sinonimos: [usuario engajado, active user]
+      definicao: Usuário que registrou pelo menos uma interação válida (Silver) no período analisado.
+      regra: "COUNT(DISTINCT usuario_id) em silver.interacoes_usuarios no período (dia/mês), considerando só registros aprovados (fora da quarentena)."
+    - nome: TaxaConclusao
+      exibicao: Taxa de conclusão
+      dono: gabriele.silva
+      sinonimos: [completion rate]
+      definicao: Proporção de interações em que o usuário concluiu o conteúdo.
+      regra: "100 * COUNT(interações com percentual_conclusao >= 100) / COUNT(interações com percentual_conclusao informado)."
+    - nome: ConversaoRecomendacao
+      exibicao: Conversão de recomendação
+      dono: gabriele.silva
+      sinonimos: [taxa de conversão, recommendation conversion]
+      definicao: Proporção de recomendações geradas que resultaram em interação do usuário com o conteúdo recomendado.
+      regra: "100 * COUNT(recomendações com interação do mesmo usuario_id no mesmo conteudo_id após data_geracao) / COUNT(recomendações geradas)."
+    - nome: AvaliacaoMedia
+      exibicao: Avaliação média
+      dono: tulio.dantas
+      sinonimos: [nota média, rating]
+      definicao: Média das notas (1 a 5) atribuídas pelos usuários a um conteúdo.
+      regra: "AVG(avaliacao) em silver.comentarios_avaliacoes, somente notas entre 1 e 5."
+    - nome: TaxaQuarentena
+      exibicao: Taxa de quarentena
+      dono: tulio.dantas
+      sinonimos: [taxa de rejeição]
+      definicao: Proporção de registros da Bronze reprovados nas regras da Silver em uma execução.
+      regra: "100 * registros em silver.rejeitados_<fonte> / registros lidos da bronze.<fonte>, por id_execucao."
+    - nome: IdExecucao
+      exibicao: Identificador da execução
+      dono: tulio.dantas
+      definicao: UUID gerado pelo workflow carga_completa do Apache Hop (Internal.Workflow.ID) e gravado em todas as camadas para correlacionar logs, dados e testes.
+      regra: "Mesmo valor em bronze.*, silver.*, silver.rejeitados_* e qualidade.resultados_testes para uma execução."
+
+# ---------------------------------------------------------------------
+# Tabelas (RF27, RF28, RF32)
+#   chave = schema.tabela ; dono = usuário ou a equipe
+#   colunas: descricao, tags (FQN de classificação) e termos (glossário)
+# ---------------------------------------------------------------------
+tabelas:
+
+  # ---------------- Fonte: Desafio 1 (schema public) ----------------
+  public.conteudo:
+    dono: tulio.dantas
+    camada: Fonte
+    tier: Tier.Tier3
+    descricao: Catálogo de conteúdos do Desafio 1 (fonte somente leitura).
+    colunas:
+      autor: {tags: [LGPD.DadoPessoal, PII.NonSensitive], descricao: Nome do autor do conteúdo (fictício).}
+  public.interacao:
+    dono: tulio.dantas
+    camada: Fonte
+    tier: Tier.Tier3
+    descricao: Interações dos usuários do Desafio 1 (fonte somente leitura).
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+  public.recomendacao:
+    dono: gabriele.silva
+    camada: Fonte
+    tier: Tier.Tier3
+    descricao: Recomendações geradas pelo motor do Desafio 1 (top-5 por usuário por execução).
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+  public.usuario:
+    dono: tulio.dantas
+    camada: Fonte
+    descricao: Cadastro mínimo de usuários do Desafio 1 (apenas o identificador — minimização desde a origem).
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+
+  # ---------------- Bronze ----------------
+  bronze.catalogo_conteudos:
+    dono: tulio.dantas
+    camada: Bronze
+    tier: Tier.Tier4
+    descricao: Cópia fiel de dados/fontes/catalogo_conteudos.csv (tudo TEXT) + auditoria (origem, data_hora_ingestao, id_execucao).
+    colunas:
+      autor: {tags: [LGPD.DadoPessoal, PII.NonSensitive]}
+      id_execucao: {termos: [IdExecucao]}
+  bronze.interacoes_usuarios:
+    dono: tulio.dantas
+    camada: Bronze
+    tier: Tier.Tier4
+    descricao: Cópia fiel de dados/fontes/interacoes_usuarios.json + auditoria.
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+      id_execucao: {termos: [IdExecucao]}
+  bronze.comentarios_avaliacoes:
+    dono: tulio.dantas
+    camada: Bronze
+    tier: Tier.Tier4
+    descricao: Cópia fiel de dados/fontes/comentarios_avaliacoes.json (tags como texto JSON) + auditoria.
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+      comentario: {tags: [LGPD.TextoLivre, PII.Sensitive], descricao: Texto livre do usuário — pode conter dado pessoal digitado espontaneamente. Não vai para a Gold.}
+      id_execucao: {termos: [IdExecucao]}
+  bronze.recomendacao:
+    dono: gabriele.silva
+    camada: Bronze
+    tier: Tier.Tier4
+    descricao: Cópia de public.recomendacao com os tipos originais + auditoria.
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+      id_execucao: {termos: [IdExecucao]}
+
+  # ---------------- Silver ----------------
+  silver.catalogo_conteudos:
+    dono: tulio.dantas
+    camada: Silver
+    tier: Tier.Tier2
+    descricao: Catálogo padronizado e tipado; chave de negócio conteudo_id (deduplicado). Entidade mestre de CONTEÚDO (RF30).
+    colunas:
+      conteudo_id: {descricao: Chave de negócio do conteúdo (PK).}
+      autor: {tags: [LGPD.DadoPessoal, PII.NonSensitive], descricao: Nome do autor. Na Gold é exibido mascarado.}
+      id_execucao: {termos: [IdExecucao]}
+  silver.interacoes_usuarios:
+    dono: tulio.dantas
+    camada: Silver
+    tier: Tier.Tier2
+    descricao: Interações validadas (referência a conteúdo existente), chave (usuario_id, conteudo_id, tipo_interacao, data_hora).
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive], termos: [UsuarioAtivo]}
+      percentual_conclusao: {termos: [TaxaConclusao]}
+      id_execucao: {termos: [IdExecucao]}
+  silver.comentarios_avaliacoes:
+    dono: tulio.dantas
+    camada: Silver
+    tier: Tier.Tier2
+    descricao: Comentários e notas validados; coluna "data" da fonte renomeada para data_comentario.
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+      comentario: {tags: [LGPD.TextoLivre, PII.Sensitive]}
+      avaliacao: {termos: [AvaliacaoMedia]}
+      id_execucao: {termos: [IdExecucao]}
+  silver.recomendacao:
+    dono: gabriele.silva
+    camada: Silver
+    tier: Tier.Tier2
+    descricao: Recomendações validadas; chave (data_geracao, usuario_id, posicao).
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+      status: {termos: [ConversaoRecomendacao]}
+      id_execucao: {termos: [IdExecucao]}
+
+  # ---------------- Quarentena (schema silver) ----------------
+  silver.rejeitados_catalogo:
+    dono: tulio.dantas
+    camada: Quarentena
+    descricao: Quarentena do catálogo — registro original + qtd_erros, codigo_erro, campo_erro, motivo_erro (RF23).
+    colunas:
+      autor: {tags: [LGPD.DadoPessoal, PII.NonSensitive]}
+      id_execucao: {termos: [IdExecucao]}
+  silver.rejeitados_interacoes:
+    dono: tulio.dantas
+    camada: Quarentena
+    descricao: Quarentena das interações (RF23).
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+      id_execucao: {termos: [IdExecucao]}
+  silver.rejeitados_comentarios:
+    dono: tulio.dantas
+    camada: Quarentena
+    descricao: Quarentena dos comentários (RF23).
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+      comentario: {tags: [LGPD.TextoLivre, PII.Sensitive]}
+      id_execucao: {termos: [IdExecucao]}
+  silver.rejeitados_recomendacao:
+    dono: gabriele.silva
+    camada: Quarentena
+    descricao: Quarentena das recomendações (RF23).
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+      id_execucao: {termos: [IdExecucao]}
+
+  # ---------------- Qualidade ----------------
+  qualidade.regras_testes:
+    dono: gabriele.silva
+    camada: Qualidade
+    descricao: Catálogo dos testes de qualidade (fórmula, limite, severidade CRITICA/ALERTA e ação) — RF31.
+  qualidade.resultados_testes:
+    dono: gabriele.silva
+    camada: Qualidade
+    descricao: Resultado de cada teste por execução (id_execucao) e por fonte; histórico para a evolução das métricas — RF31.
+    colunas:
+      id_execucao: {termos: [IdExecucao]}
+
+  # ---------------- Gold (sql/05_criar_tabelas_gold.sql) ----------------
+  # Modelo estrela carregado pelos pipelines gold_* do Hop + views de KPI.
+  gold.dim_conteudo:
+    dono: gabriele.silva
+    camada: Gold
+    tier: Tier.Tier1
+    descricao: "Dimensão conteúdo. Grão: 1 linha por conteudo_id. Descrição e autor ficam FORA (minimização — RF32)."
+    colunas:
+      conteudo_id: {descricao: "Chave de negócio do conteúdo (PK).", tags: [LGPD.NaoPessoal]}
+      faixa_carga_horaria: {descricao: "Faixa derivada de carga_horaria_min."}
+      ano_publicacao: {descricao: "Ano extraído de data_publicacao."}
+      id_execucao: {termos: [IdExecucao]}
+  gold.dim_usuario:
+    dono: gabriele.silva
+    camada: Gold
+    tier: Tier.Tier1
+    descricao: "Dimensão usuário. Grão: 1 linha por usuario_id. Somente atributos de comportamento, sem dados cadastrais."
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+      usuario_ativo: {descricao: "Interagiu nos 30 dias anteriores à data de referência (interação mais recente da base).", termos: [UsuarioAtivo]}
+      id_execucao: {termos: [IdExecucao]}
+  gold.fato_interacoes:
+    dono: gabriele.silva
+    camada: Gold
+    tier: Tier.Tier1
+    descricao: "Fato interações. Grão: 1 interação (usuario_id, conteudo_id, tipo_interacao, data_hora). Sinaliza concluiu e antes_da_publicacao (teste Q04)."
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive], termos: [UsuarioAtivo]}
+      concluiu: {descricao: "tipo_interacao = conclusao.", termos: [TaxaConclusao]}
+      antes_da_publicacao: {descricao: "Inconsistência temporal mantida e sinalizada (regra Q04)."}
+      avaliacao_atribuida: {termos: [AvaliacaoMedia]}
+      id_execucao: {termos: [IdExecucao]}
+  gold.fato_recomendacao:
+    dono: gabriele.silva
+    camada: Gold
+    tier: Tier.Tier1
+    descricao: "Fato recomendação. Grão: 1 recomendação do LOTE MAIS RECENTE (usuario_id, posicao). Sobrevivência: publica só o maior data_geracao."
+    colunas:
+      usuario_id: {tags: [LGPD.IdentificadorIndireto, PII.NonSensitive]}
+      convertida: {descricao: "Usuário interagiu com o conteúdo recomendado depois de data_geracao.", termos: [ConversaoRecomendacao]}
+      id_execucao: {termos: [IdExecucao]}
+  gold.vw_kpi_engajamento_mensal:
+    dono: gabriele.silva
+    camada: Gold
+    tier: Tier.Tier1
+    descricao: "KPI de engajamento por mês (ano_mes). Sem dados pessoais."
+    colunas:
+      usuarios_ativos: {termos: [UsuarioAtivo], tags: [LGPD.NaoPessoal]}
+      taxa_conclusao_pct: {descricao: "100 * pares (usuário, conteúdo) concluídos / pares com interação.", termos: [TaxaConclusao], tags: [LGPD.NaoPessoal]}
+      avaliacao_media: {termos: [AvaliacaoMedia], tags: [LGPD.NaoPessoal]}
+  gold.vw_kpi_conteudo:
+    dono: gabriele.silva
+    camada: Gold
+    tier: Tier.Tier1
+    descricao: "KPI por categoria e tipo de conteúdo. Sem dados pessoais."
+    colunas:
+      taxa_conclusao_pct: {termos: [TaxaConclusao], tags: [LGPD.NaoPessoal]}
+      avaliacao_media: {termos: [AvaliacaoMedia], tags: [LGPD.NaoPessoal]}
+  gold.vw_kpi_recomendacao:
+    dono: gabriele.silva
+    camada: Gold
+    tier: Tier.Tier1
+    descricao: "KPI das recomendações do lote mais recente por status. Sem dados pessoais."
+    colunas:
+      taxa_conversao_pct: {descricao: "100 * convertidas / recomendações.", termos: [ConversaoRecomendacao], tags: [LGPD.NaoPessoal]}
+
+# ---------------------------------------------------------------------
+# Ativos fora do PostgreSQL, registrados manualmente (RF27, RF29)
+# ---------------------------------------------------------------------
+arquivos:          # fontes do Desafio 1 (serviço de armazenamento)
+  servico: arquivos_desafio1
+  descricao: "Arquivos do projeto: fontes do Desafio 1 (dados/fontes, somente leitura) e arquivos Parquet/CSV gerados (RF24, RF25)."
+  dono: tulio.dantas
+  itens:
+    - nome: catalogo_conteudos.csv
+      formato: csv
+      caminho: dados/fontes/catalogo_conteudos.csv
+      descricao: Catálogo de conteúdos (CSV).
+    - nome: interacoes_usuarios.json
+      formato: json
+      caminho: dados/fontes/interacoes_usuarios.json
+      descricao: Interações dos usuários (JSON).
+    - nome: comentarios_avaliacoes.json
+      formato: json
+      caminho: dados/fontes/comentarios_avaliacoes.json
+      descricao: Comentários e avaliações (JSON semiestruturado, tags em lista).
+    - nome: interacoes_usuarios.snappy.parquet
+      formato: parquet
+      camada: Silver
+      caminho: dados/silver/parquet/interacoes_usuarios.snappy.parquet
+      descricao: "Recorte de silver.interacoes_usuarios em Parquet/Snappy (RF24). Mesmo esquema, tipos e auditoria."
+    - nome: interacoes_usuarios.csv
+      formato: csv
+      camada: Silver
+      caminho: dados/silver/csv/interacoes_usuarios.csv
+      descricao: "Mesmo recorte em CSV, usado só na comparação de tamanho e leitura (RF24)."
+    - nome: engajamento_por_tipo
+      formato: parquet
+      camada: Gold
+      caminho: "dados/gold/beam/<runtime>/engajamento_por_tipo"
+      descricao: "Agregação de engajamento por tipo de interação gerada pelo Apache Beam (DirectRunner e Spark) — RF25."
+
+hop:               # pipelines do Apache Hop (serviço de pipeline)
+  servico: hop_desafio
+  descricao: Projeto Apache Hop desafio_dados_2 (ambiente dev). Orquestrado pelo workflow carga_completa.
+  dono: tulio.dantas
+  pipelines:
+    - nome: carga_completa
+      descricao: "Workflow: cria schemas -> Bronze -> Silver -> testes de qualidade -> (bloqueia se crítico falhar) -> Gold -> publicação de metadados."
+    - nome: bronze_catalogo_csv
+      descricao: Lê o CSV e grava bronze.catalogo_conteudos com campos de auditoria.
+    - nome: bronze_interacoes_json
+      descricao: Lê o JSON de interações e grava bronze.interacoes_usuarios.
+    - nome: bronze_comentarios_json
+      descricao: Lê o JSON de comentários e grava bronze.comentarios_avaliacoes.
+    - nome: bronze_recomendacao_pg
+      descricao: Copia public.recomendacao para bronze.recomendacao.
+    - nome: silver_catalogo
+      descricao: Padroniza tipos/categorias, deduplica por conteudo_id e envia inválidos para silver.rejeitados_catalogo.
+    - nome: silver_interacoes
+      descricao: Tipagem, validação de referência a conteúdo e deduplicação; inválidos para a quarentena.
+    - nome: silver_comentarios
+      descricao: Tipagem, validação de nota (1-5) e referência; inválidos para a quarentena.
+    - nome: silver_recomendacao
+      descricao: Validação de pontuação, posição e referências; inválidos para a quarentena.
+    - nome: gold_dim_conteudo
+      descricao: Carrega gold.dim_conteudo a partir da Silver (sem descrição e autor).
+    - nome: gold_dim_usuario
+      descricao: "Deriva gold.dim_usuario (primeira/última interação, usuario_ativo) a partir das interações."
+    - nome: gold_fato_interacoes
+      descricao: Carrega gold.fato_interacoes com ano_mes, concluiu e antes_da_publicacao.
+    - nome: gold_fato_recomendacao
+      descricao: "Carrega gold.fato_recomendacao: só o lote mais recente e a flag convertida."
+    - nome: exportar_interacoes
+      descricao: Exporta o mesmo recorte da Silver para CSV e Parquet (RF24).
+    - nome: engajamento_beam
+      descricao: "Pipeline Apache Beam: lê o Parquet da Silver, agrega por tipo de interação e grava Parquet. Rodado com beam-direct e spark-local (RF25)."
+
+superset:          # consumo (serviço de dashboard) — ajustar aos nomes reais
+  servico: superset_desafio
+  descricao: Apache Superset do projeto (SQL Lab, datasets virtuais e dashboard executivo).
+  dono: libia.canete
+  datasets_virtuais:           # consultas salvas do SQL Lab (RF17)
+    - nome: vds_engajamento_categoria
+      descricao: Dataset virtual do SQL Lab — engajamento e taxa de conclusão por mês e por categoria.
+      sql_arquivo: sql/sql_lab.sql
+      origem: [gold.vw_kpi_engajamento_mensal, gold.vw_kpi_conteudo]
+    - nome: vds_conversao_recomendacao
+      descricao: Dataset virtual do SQL Lab — conversão de recomendação do lote mais recente por status.
+      sql_arquivo: sql/sql_lab.sql
+      origem: [gold.vw_kpi_recomendacao]
+  graficos:
+    - nome: kpi_taxa_conclusao
+      descricao: "KPI: taxa de conclusão no período (termo TaxaConclusao)."
+      tipo: Other
+    - nome: kpi_usuarios_ativos
+      descricao: "KPI: usuários ativos no período (termo UsuarioAtivo)."
+      tipo: Other
+    - nome: conversao_por_status
+      descricao: Conversão de recomendação por status (barras).
+      tipo: Bar
+  dashboards:
+    - nome: painel_executivo
+      exibicao: Painel executivo — engajamento e recomendações
+      descricao: Dashboard do storytelling executivo (RF16) com filtros cruzados e alerta (RF18). Consulta apenas a Gold.
+      graficos: [kpi_taxa_conclusao, kpi_usuarios_ativos, conversao_por_status]
+      datasets: [vds_engajamento_categoria, vds_conversao_recomendacao]
+
+# ---------------------------------------------------------------------
+# Linhagem manual (RF29): o que a ingestão NÃO extrai sozinha.
+# Formato das pontas:
+#   arquivo:<nome>     tabela:<schema.tabela>     dataset:<nome do dataset virtual>
+#   dashboard:<nome>
+# "via" = pipeline Hop que faz a transformação (aparece na aresta).
+# A linhagem Silver -> Gold feita por VIEW é extraída automaticamente
+# (ingestao/postgres_linhagem.yaml); se a Gold for TABELA, declare aqui.
+# ---------------------------------------------------------------------
+linhagem:
+  # Fonte -> Bronze
+  - {de: arquivo:catalogo_conteudos.csv,     para: tabela:bronze.catalogo_conteudos,     via: bronze_catalogo_csv,     descricao: Ingestão sem transformação destrutiva + auditoria.}
+  - {de: arquivo:interacoes_usuarios.json,   para: tabela:bronze.interacoes_usuarios,    via: bronze_interacoes_json,  descricao: Ingestão do JSON + auditoria.}
+  - {de: arquivo:comentarios_avaliacoes.json, para: tabela:bronze.comentarios_avaliacoes, via: bronze_comentarios_json, descricao: Ingestão do JSON semiestruturado + auditoria.}
+  - {de: tabela:public.recomendacao,         para: tabela:bronze.recomendacao,           via: bronze_recomendacao_pg,  descricao: Cópia do banco do Desafio 1 + auditoria.}
+  # Bronze -> Silver / Quarentena
+  - {de: tabela:bronze.catalogo_conteudos,     para: tabela:silver.catalogo_conteudos,      via: silver_catalogo,     descricao: "Padronização, tipagem, deduplicação por conteudo_id."}
+  - {de: tabela:bronze.catalogo_conteudos,     para: tabela:silver.rejeitados_catalogo,     via: silver_catalogo,     descricao: "Registros que violam CAT01..CAT08."}
+  - {de: tabela:bronze.interacoes_usuarios,    para: tabela:silver.interacoes_usuarios,     via: silver_interacoes,   descricao: "Tipagem, validação e deduplicação."}
+  - {de: tabela:silver.catalogo_conteudos,     para: tabela:silver.interacoes_usuarios,     via: silver_interacoes,   descricao: "Integridade referencial: conteudo_id precisa existir no catálogo."}
+  - {de: tabela:bronze.interacoes_usuarios,    para: tabela:silver.rejeitados_interacoes,   via: silver_interacoes,   descricao: "Registros que violam INT01..INTnn."}
+  - {de: tabela:bronze.comentarios_avaliacoes, para: tabela:silver.comentarios_avaliacoes,  via: silver_comentarios,  descricao: "Tipagem, nota 1-5, data -> data_comentario."}
+  - {de: tabela:bronze.comentarios_avaliacoes, para: tabela:silver.rejeitados_comentarios,  via: silver_comentarios,  descricao: "Registros que violam COM01..COMnn."}
+  - {de: tabela:bronze.recomendacao,           para: tabela:silver.recomendacao,            via: silver_recomendacao, descricao: "Validação de pontuação/posição/referências."}
+  - {de: tabela:bronze.recomendacao,           para: tabela:silver.rejeitados_recomendacao, via: silver_recomendacao, descricao: "Registros que violam REC01..RECnn."}
+  # Silver -> Gold (tabelas carregadas pelo Hop; as VIEWS de KPI têm linhagem automática)
+  - {de: tabela:silver.catalogo_conteudos,  para: tabela:gold.dim_conteudo,      via: gold_dim_conteudo,      descricao: "Seleção de atributos, faixa_carga_horaria e ano_publicacao; remove descrição e autor."}
+  - {de: tabela:silver.interacoes_usuarios, para: tabela:gold.dim_usuario,       via: gold_dim_usuario,       descricao: "Agregação por usuário; usuario_ativo = interação nos 30 dias anteriores à referência."}
+  - {de: tabela:silver.interacoes_usuarios, para: tabela:gold.fato_interacoes,   via: gold_fato_interacoes,   descricao: "Derivação de ano_mes, concluiu e antes_da_publicacao."}
+  - {de: tabela:silver.catalogo_conteudos,  para: tabela:gold.fato_interacoes,   via: gold_fato_interacoes,   descricao: "data_publicacao para a flag antes_da_publicacao."}
+  - {de: tabela:silver.recomendacao,        para: tabela:gold.fato_recomendacao, via: gold_fato_recomendacao, descricao: "Sobrevivência: somente o lote de maior data_geracao."}
+  - {de: tabela:silver.interacoes_usuarios, para: tabela:gold.fato_recomendacao, via: gold_fato_recomendacao, descricao: "Flag convertida: interação no conteúdo recomendado após data_geracao."}
+  # Silver -> Parquet -> Beam (RF24, RF25)
+  - {de: tabela:silver.interacoes_usuarios,          para: arquivo:interacoes_usuarios.snappy.parquet, via: exportar_interacoes, descricao: "Exportação para Parquet/Snappy."}
+  - {de: tabela:silver.interacoes_usuarios,          para: arquivo:interacoes_usuarios.csv,            via: exportar_interacoes, descricao: "Mesmo recorte em CSV para comparação."}
+  - {de: arquivo:interacoes_usuarios.snappy.parquet, para: arquivo:engajamento_por_tipo,               via: engajamento_beam,    descricao: "Agregação Beam por tipo de interação (DirectRunner e Spark, mesma regra)."}
+  # Gold -> SQL Lab -> Dashboard
+  - {de: tabela:gold.vw_kpi_engajamento_mensal, para: dataset:vds_engajamento_categoria,  descricao: "Consulta salva do SQL Lab (dataset virtual)."}
+  - {de: tabela:gold.vw_kpi_conteudo,           para: dataset:vds_engajamento_categoria,  descricao: "Consulta salva do SQL Lab (dataset virtual)."}
+  - {de: tabela:gold.vw_kpi_recomendacao,       para: dataset:vds_conversao_recomendacao, descricao: "Consulta salva do SQL Lab (dataset virtual)."}
+  - {de: dataset:vds_engajamento_categoria,     para: dashboard:painel_executivo,         descricao: "Alimenta os KPIs taxa de conclusão e usuários ativos."}
+  - {de: dataset:vds_conversao_recomendacao,    para: dashboard:painel_executivo,         descricao: "Alimenta o gráfico de conversão por status."}

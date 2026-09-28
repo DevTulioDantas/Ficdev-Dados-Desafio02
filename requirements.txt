@@ -2,3 +2,5 @@ python-dotenv
 psycopg2-binary
 pymongo
 pandas
+requests
+pyyaml
