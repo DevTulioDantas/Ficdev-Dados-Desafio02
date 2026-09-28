@@ -1,0 +1,11 @@
+{
+  "engineRunConfiguration": {
+    "Local": {
+      "safe_mode": false
+    }
+  },
+  "name": "local",
+  "description": "Execucao local padrao do Hop (usada pelo workflow carga_completa)",
+  "executionInfoLocationName": "",
+  "defaultSelection": true
+}
