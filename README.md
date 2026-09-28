@@ -22,7 +22,7 @@ Continuação do [Desafio Prático 1](https://github.com/DevTulioDantas/-Ficdev-
 | RF20–RF23 | Hop: Bronze, Silver, workflow, quarentena | ⚪ |
 | RF24–RF25 | Parquet e Apache Beam | ⚪ |
 | RF26 | Camada Gold | ⚪ |
-| RF27–RF29 | OpenMetadata: catálogo, glossário, linhagem | ⚪ |
+| RF27–RF29 | OpenMetadata: catálogo, glossário, linhagem | 🟡 em andamento — ver [`openmetadata/README.md`](openmetadata/README.md) (Gold catalogada; falta o Superset) |
 | RF30–RF31 | Dados mestres e qualidade | ⚪ |
 | RF32–RF33 | LGPD | ⚪ |
 
