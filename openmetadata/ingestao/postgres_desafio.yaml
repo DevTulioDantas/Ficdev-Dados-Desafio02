@@ -1,0 +1,45 @@
+# =====================================================================
+# Ingestao de metadados tecnicos do PostgreSQL do projeto (RF27)
+# Cataloga os schemas das camadas (Bronze, Silver, Gold), a quarentena,
+# os resultados de qualidade e a fonte do Desafio 1 (public).
+#
+# Credenciais: vem do .env da raiz (nao versionado), expandidas pelo CLI.
+# Execucao (na pasta openmetadata/):
+#   docker compose run --rm ingestao metadata ingest -c /config/postgres_desafio.yaml
+# =====================================================================
+source:
+  type: postgres
+  serviceName: pg_desafio
+  serviceConnection:
+    config:
+      type: Postgres
+      username: ${POSTGRES_USER}
+      authType:
+        password: ${POSTGRES_PASSWORD}
+      # o desafio-postgres roda fora da rede do OpenMetadata, na porta 5432 do host
+      hostPort: host.docker.internal:5432
+      database: desafio_dados
+  sourceConfig:
+    config:
+      type: DatabaseMetadata
+      includeViews: true
+      includeTags: true
+      markDeletedTables: true
+      schemaFilterPattern:
+        includes:
+          - ^public$
+          - ^bronze$
+          - ^silver$
+          - ^gold$
+          - ^qualidade$
+          - ^lgpd$
+sink:
+  type: metadata-rest
+  config: {}
+workflowConfig:
+  loggerLevel: INFO
+  openMetadataServerConfig:
+    hostPort: ${OM_SERVER}
+    authProvider: openmetadata
+    securityConfig:
+      jwtToken: ${OM_JWT_TOKEN}

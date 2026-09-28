@@ -1,0 +1,43 @@
+# =====================================================================
+# Linhagem automatica a partir das VIEWS do PostgreSQL (RF29)
+# O OpenMetadata le o SQL de cada view (ex.: gold.* sobre silver.*) e
+# cria as arestas tabela -> view, inclusive coluna a coluna.
+# O que nao da para extrair (arquivos, Hop, Superset) e registrado
+# manualmente por openmetadata/publicar_metadados.py.
+#
+# Execucao (na pasta openmetadata/), DEPOIS da ingestao de metadados:
+#   docker compose run --rm ingestao metadata ingest -c /config/postgres_linhagem.yaml
+# =====================================================================
+source:
+  type: postgres-lineage
+  serviceName: pg_desafio
+  serviceConnection:
+    config:
+      type: Postgres
+      username: ${POSTGRES_USER}
+      authType:
+        password: ${POSTGRES_PASSWORD}
+      hostPort: host.docker.internal:5432
+      database: desafio_dados
+  sourceConfig:
+    config:
+      type: DatabaseLineage
+      processViewLineage: true
+      # pg_stat_statements nao esta habilitado no container: sem query log
+      processQueryLineage: false
+      processStoredProcedureLineage: false
+      schemaFilterPattern:
+        includes:
+          - ^public$
+          - ^silver$
+          - ^gold$
+sink:
+  type: metadata-rest
+  config: {}
+workflowConfig:
+  loggerLevel: INFO
+  openMetadataServerConfig:
+    hostPort: ${OM_SERVER}
+    authProvider: openmetadata
+    securityConfig:
+      jwtToken: ${OM_JWT_TOKEN}
