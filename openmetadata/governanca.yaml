@@ -79,6 +79,34 @@ classificacoes:
         descricao: Tabelas e visões orientadas aos KPIs; única camada consultada pelo dashboard.
       - nome: Qualidade
         descricao: Regras e resultados dos testes de qualidade por execução.
+  - nome: SeveridadeQualidade
+    descricao: Severidade dos testes de qualidade (RF31) e a ação do workflow quando o teste reprova.
+    mutuamente_exclusiva: true
+    tags:
+      - nome: Critica
+        descricao: Reprovação BLOQUEIA a publicação da camada Gold (workflow termina em falha).
+      - nome: Alerta
+        descricao: Reprovação gera "sucesso com ressalvas" e aciona o responsável.
+
+# ---------------------------------------------------------------------
+# Qualidade de dados no catálogo (RF31)
+# Regras e resultados vêm do PostgreSQL (qualidade.regras_testes e
+# qualidade.resultados_testes), gravados pelo workflow carga_completa.
+# Cada teste vira um "test case" do OpenMetadata ligado à tabela medida,
+# e cada execução vira um ponto no histórico (gráfico de evolução).
+# ---------------------------------------------------------------------
+qualidade:
+  suite: qualidade_desafio2
+  suite_exibicao: Qualidade Desafio 2
+  suite_descricao: Testes de qualidade Q01-Q05 executados pelo workflow carga_completa do Apache Hop, com histórico por execução.
+  dono: gabriele.silva
+  # dimensão da regra (coluna "dimensao" no banco) -> dimensão do OpenMetadata
+  dimensoes:
+    Completude: Completeness
+    Validade: Validity
+    Unicidade: Uniqueness
+    Consistencia: Consistency
+    Integridade referencial: Integrity
 
 # ---------------------------------------------------------------------
 # Glossário de negócio (RF28) — definição, regra de cálculo e responsável

@@ -19,6 +19,7 @@ import re
 import sys
 from pathlib import Path
 
+import psycopg2
 import requests
 import yaml
 from dotenv import load_dotenv
@@ -269,6 +270,118 @@ class Publicador:
             criadas += 1
         log.info("Linhagem manual: %d arestas", criadas)
 
+    # -- qualidade de dados (RF31) ---------------------------------------
+    def ler_qualidade(self):
+        """Lê regras e resultados gravados pelo workflow no PostgreSQL."""
+        pg = json.loads((RAIZ / "config.json").read_text(encoding="utf-8"))["postgres"]
+        conn = psycopg2.connect(host=pg["host"], port=pg["porta"], dbname=pg["banco"],
+                                user=os.getenv("POSTGRES_USER", "postgres"),
+                                password=os.getenv("POSTGRES_PASSWORD", ""))
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""SELECT teste_id, dimensao, descricao, fonte, formula, operador,
+                                      limite, unidade, severidade, acao
+                               FROM qualidade.regras_testes ORDER BY teste_id""")
+                cols = [c[0] for c in cur.description]
+                regras = [dict(zip(cols, r)) for r in cur.fetchall()]
+                cur.execute("""SELECT id_execucao, teste_id, total_registros, registros_com_problema,
+                                      valor_medido, limite, severidade, resultado, data_hora_teste
+                               FROM qualidade.resultados_testes ORDER BY data_hora_teste""")
+                cols = [c[0] for c in cur.description]
+                resultados = [dict(zip(cols, r)) for r in cur.fetchall()]
+        finally:
+            conn.close()
+        return regras, resultados
+
+    def qualidade(self):
+        q = self.cfg["qualidade"]
+        regras, resultados = self.ler_qualidade()
+
+        # 1 definição de teste por dimensão: o OM agrupa os testes por dimensão
+        parametros = [{"name": n, "displayName": d, "dataType": "STRING", "required": False}
+                      for n, d in (("formula", "Fórmula"), ("operador", "Operador"),
+                                   ("limite", "Limite aceitável"), ("severidade", "Severidade"),
+                                   ("acao", "Ação diante da violação"))]
+        for dim, dim_om in q["dimensoes"].items():
+            self.om.put("/v1/dataQuality/testDefinitions", {
+                "name": f"regraDesafio{dim_om}", "displayName": f"Regra do Desafio 2 — {dim}",
+                "description": (f"Teste de {dim.lower()} executado em SQL pelo workflow carga_completa "
+                                "(sql/04_executar_testes_qualidade.sql); o resultado é publicado aqui."),
+                "entityType": "TABLE", "testPlatforms": ["OpenMetadata"],
+                "dataQualityDimension": dim_om, "parameterDefinition": parametros})
+
+        casos = {}
+        for r in regras:
+            tabela = self.buscar_tabela(r["fonte"])
+            if tabela is None:
+                self.pendentes.append(f"teste {r['teste_id']} (tabela {r['fonte']})")
+                continue
+            sev = "Critica" if r["severidade"] == "CRITICA" else "Alerta"
+            descricao = (f"**{r['descricao']}** ({r['dimensao']})\n\n"
+                         f"- **Fórmula:** {r['formula']}\n"
+                         f"- **Limite aceitável:** valor {r['operador']} {r['limite']:g} {r['unidade']}\n"
+                         f"- **Severidade:** {r['severidade']}\n- **Ação:** {r['acao']}")
+            caso = self.om.put("/v1/dataQuality/testCases", {
+                "name": f"{r['teste_id']}_{r['dimensao'].split()[0].lower()}",
+                "displayName": f"{r['teste_id']} — {r['descricao']}",
+                "description": descricao,
+                "entityLink": f"<#E::table::{tabela['fullyQualifiedName']}>",
+                "testDefinition": f"regraDesafio{q['dimensoes'][r['dimensao']]}",
+                "parameterValues": [{"name": "formula", "value": r["formula"]},
+                                    {"name": "operador", "value": r["operador"]},
+                                    {"name": "limite", "value": f"{r['limite']:g} {r['unidade']}"},
+                                    {"name": "severidade", "value": r["severidade"]},
+                                    {"name": "acao", "value": r["acao"]}],
+                "owners": self.dono(q["dono"]),
+                "tags": [rotulo(f"SeveridadeQualidade.{sev}")]})
+            casos[r["teste_id"]] = (caso, r)
+
+        # suítes de tabela (criadas pelo OM junto com os testes) também têm dono (anti Data Swamp)
+        for fonte in {r["fonte"] for _, r in casos.values()}:
+            basica = self.om.get(f"/v1/dataQuality/testSuites/name/{self.fqn_tabela(fonte)}.testSuite")
+            if basica:
+                self.om.patch(f"/v1/dataQuality/testSuites/{basica['id']}",
+                              [{"op": "add", "path": "/owners", "value": self.dono(q["dono"])}])
+
+        # suíte lógica com os 5 testes (uma tela só na apresentação)
+        suite = self.om.get(f"/v1/dataQuality/testSuites/name/{q['suite']}")
+        if suite is None:
+            suite = self.om.put("/v1/dataQuality/testSuites", {
+                "name": q["suite"], "displayName": q["suite_exibicao"],
+                "description": q["suite_descricao"], "owners": self.dono(q["dono"])})
+        self.om.put("/v1/dataQuality/testCases/logicalTestCases",
+                    {"testSuiteId": suite["id"], "testCaseIds": [c["id"] for c, _ in casos.values()]})
+
+        # histórico: 1 resultado por execução; só envia o que ainda não está no OM
+        enviados = 0
+        for teste_id, (caso, regra) in casos.items():
+            fqn = caso["fullyQualifiedName"]
+            existentes = self.om.get(f"/v1/dataQuality/testCases/testCaseResults/{fqn}",
+                                     startTs=0, endTs=4102444800000) or {"data": []}
+            ja = {x["timestamp"] for x in existentes.get("data", [])}
+            for res in (x for x in resultados if x["teste_id"] == teste_id):
+                ts = int(res["data_hora_teste"].timestamp() * 1000)
+                if ts in ja:
+                    continue
+                total, problema = res["total_registros"], res["registros_com_problema"]
+                self.om.s.post(f"{self.om.url}/v1/dataQuality/testCases/testCaseResults/{fqn}",
+                               data=json.dumps({
+                                   "timestamp": ts,
+                                   "testCaseStatus": "Success" if res["resultado"] == "APROVADO" else "Failed",
+                                   "result": (f"{res['resultado']} [{res['severidade']}]: medido "
+                                              f"{res['valor_medido']:g} {regra['unidade']} "
+                                              f"(limite {regra['operador']} {res['limite']:g}). "
+                                              f"id_execucao={res['id_execucao']}"),
+                                   "testResultValue": [
+                                       {"name": "valorMedido", "value": str(res["valor_medido"])},
+                                       {"name": "registrosComProblema", "value": str(problema)},
+                                       {"name": "totalRegistros", "value": str(total)}],
+                                   "passedRows": total - problema, "failedRows": problema,
+                               }), timeout=60).raise_for_status()
+                enviados += 1
+        log.info("Qualidade: %d testes, %d resultados novos enviados (%d execuções no banco)",
+                 len(casos), enviados, len({x["id_execucao"] for x in resultados}))
+
     def executar(self):
         self.usuarios_e_equipe()
         self.classificacoes()
@@ -278,6 +391,7 @@ class Publicador:
         self.hop()
         self.superset()
         self.linhagem()
+        self.qualidade()
 
 
 # ---------------------------------------------------------------------
