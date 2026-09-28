@@ -38,13 +38,20 @@
   FROM silver.interacoes_usuarios
   GROUP BY usuario_id
 )
-SELECT u.usuario_id
+-- RF33: o usuario_id so e usado aqui dentro para a juncao; a Gold recebe o pseudonimo
+SELECT ps.pseudonimo                               AS usuario_pseudonimo
+     , pr.nome_mascarado
+     , pr.email_mascarado
+     , pr.faixa_etaria
+     , pr.uf
      , r.data_primeira_interacao
      , r.data_ultima_interacao
      , COALESCE(r.total_interacoes, 0)::INTEGER    AS total_interacoes
      , COALESCE(r.conteudos_distintos, 0)::INTEGER AS conteudos_distintos
      , COALESCE(r.data_ultima_interacao &gt;= (ref.data_referencia - INTERVAL '30 days')::DATE, FALSE) AS usuario_ativo
 FROM public.usuario u
+JOIN lgpd.usuario_pseudonimo ps     ON ps.usuario_id = u.usuario_id
+LEFT JOIN lgpd.usuario_protegido pr ON pr.pseudonimo = ps.pseudonimo
 LEFT JOIN resumo r ON r.usuario_id = u.usuario_id
 CROSS JOIN referencia ref</sql>
     <limit>0</limit>

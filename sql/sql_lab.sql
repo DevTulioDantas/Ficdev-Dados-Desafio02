@@ -27,7 +27,7 @@
 -- Campos calculados:
 --   mes                     date_trunc('month', data_hora)::date - 1o dia do mes (eixo de tempo)
 --   interacoes              COUNT(*)
---   usuarios_ativos         COUNT(DISTINCT usuario_id) no grupo
+--   usuarios_ativos         COUNT(DISTINCT usuario_pseudonimo) no grupo (RF33)
 --   pares_usuario_conteudo  pares (usuario, conteudo) distintos com alguma interacao
 --   pares_concluidos        pares (usuario, conteudo) com interacao do tipo conclusao
 --   taxa_conclusao_pct      100 * pares_concluidos / pares_usuario_conteudo
@@ -42,11 +42,11 @@ SELECT
     d.categoria,
     d.tipo                                                        AS tipo_conteudo,
     COUNT(*)                                                      AS interacoes,
-    COUNT(DISTINCT f.usuario_id)                                  AS usuarios_ativos,
-    COUNT(DISTINCT (f.usuario_id, f.conteudo_id))                 AS pares_usuario_conteudo,
-    COUNT(DISTINCT (f.usuario_id, f.conteudo_id)) FILTER (WHERE f.concluiu) AS pares_concluidos,
-    ROUND(100.0 * COUNT(DISTINCT (f.usuario_id, f.conteudo_id)) FILTER (WHERE f.concluiu)
-          / NULLIF(COUNT(DISTINCT (f.usuario_id, f.conteudo_id)), 0), 2)       AS taxa_conclusao_pct,
+    COUNT(DISTINCT f.usuario_pseudonimo)                                  AS usuarios_ativos,
+    COUNT(DISTINCT (f.usuario_pseudonimo, f.conteudo_id))                 AS pares_usuario_conteudo,
+    COUNT(DISTINCT (f.usuario_pseudonimo, f.conteudo_id)) FILTER (WHERE f.concluiu) AS pares_concluidos,
+    ROUND(100.0 * COUNT(DISTINCT (f.usuario_pseudonimo, f.conteudo_id)) FILTER (WHERE f.concluiu)
+          / NULLIF(COUNT(DISTINCT (f.usuario_pseudonimo, f.conteudo_id)), 0), 2)       AS taxa_conclusao_pct,
     ROUND(AVG(f.avaliacao_atribuida), 2)                          AS avaliacao_media,
     SUM(f.tempo_consumido)                                        AS tempo_consumido_total,
     COUNT(*) FILTER (WHERE f.antes_da_publicacao)                 AS interacoes_inconsistentes,
@@ -71,7 +71,7 @@ ORDER BY 1, 2, 3;
 --   data_geracao        data_geracao::date - dia em que o lote foi gerado
 --   faixa_pontuacao     CASE: Alta (>= 70), Media (>= 40), Baixa (< 40)
 --   recomendacoes       COUNT(*)
---   usuarios            COUNT(DISTINCT usuario_id)
+--   usuarios            COUNT(DISTINCT usuario_pseudonimo) (RF33)
 --   pontuacao_media     AVG(pontuacao)
 --   convertidas         recomendacoes seguidas de interacao do usuario no conteudo recomendado
 --   taxa_conversao_pct  100 * convertidas / recomendacoes
@@ -86,7 +86,7 @@ SELECT
     END                                                           AS faixa_pontuacao,
     d.categoria                                                   AS categoria_recomendada,
     COUNT(*)                                                      AS recomendacoes,
-    COUNT(DISTINCT r.usuario_id)                                  AS usuarios,
+    COUNT(DISTINCT r.usuario_pseudonimo)                                  AS usuarios,
     ROUND(AVG(r.pontuacao), 2)                                    AS pontuacao_media,
     COUNT(*) FILTER (WHERE r.convertida)                          AS convertidas,
     ROUND(100.0 * COUNT(*) FILTER (WHERE r.convertida) / NULLIF(COUNT(*), 0), 2) AS taxa_conversao_pct

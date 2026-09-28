@@ -1,0 +1,66 @@
+﻿== 1) Volumes ==
+ cadastros_ficticios | com_dado_sensivel | pseudonimos | protegidos | usuarios_na_gold 
+---------------------+-------------------+-------------+------------+------------------
+                 150 |                15 |         150 |        150 |              150
+(1 row)
+
+== 2) Cadastro FICTICIO (schema lgpd, acesso restrito) - amostra ==
+         nome          |           email            |      cpf       |    telefone     | data_nascimento |    cidade    | uf | necessidade_acessibilidade 
+-----------------------+----------------------------+----------------+-----------------+-----------------+--------------+----+----------------------------
+ Ana Borges Ramos      | ana.ramos139@exemplo.com   | 808.545.929-04 | (65) 90000-4447 | 1992-04-07      | Campo Grande | MS | 
+ Ana Guimaraes Moreira | ana.moreira104@exemplo.com | 021.211.550-32 | (65) 90000-3327 | 1982-07-17      | Goiania      | GO | baixa visao
+ Ana Nogueira Almeida  | ana.almeida113@exemplo.com | 014.294.744-17 | (65) 90000-7095 | 1986-06-17      | Goiania      | GO | 
+(3 rows)
+
+== 3) O que chega ao dashboard (gold.dim_usuario) - amostra ==
+ usuario_pseudonimo |    nome_mascarado     |  email_mascarado   | faixa_etaria | uf 
+--------------------+-----------------------+--------------------+--------------+----
+ U179c9c943a68996a  | A** B***** R****      | a*****@exemplo.com | 25-34        | MS
+ U7bc52e241b7be0d8  | A** G******** M****** | a*****@exemplo.com | 35-44        | GO
+ U4a0e72f4700551b0  | A** N******* A******  | a*****@exemplo.com | 35-44        | GO
+(3 rows)
+
+== 4) Hash com salt do e-mail (64 hex, irreversivel) - amostra ==
+  email_mascarado   |                            email_hash                            | tamanho 
+--------------------+------------------------------------------------------------------+---------
+ a*****@exemplo.com | 60436feb0e94fa82d8b06ddf7b235df8331657c80d28608530ec10151d01fbba |      64
+ a*****@exemplo.com | 50dd1dfdf6377ffa9ff160d34dee89269b59e9f2b6257c83f2c789ea94a0464d |      64
+(2 rows)
+
+== 5) Minimizacao: colunas de usuario nas tabelas Gold (nenhum usuario_id) ==
+        table_name         |    column_name     
+---------------------------+--------------------
+ dim_usuario               | usuario_ativo
+ dim_usuario               | usuario_pseudonimo
+ fato_interacoes           | usuario_pseudonimo
+ fato_recomendacao         | usuario_pseudonimo
+ vw_kpi_conteudo           | usuarios
+ vw_kpi_engajamento_mensal | usuarios_ativos
+ vw_kpi_recomendacao       | usuarios
+(7 rows)
+
+== 6) Campos do cadastro que NAO chegam a Gold ==
+     campo_do_cadastro      | existe_na_gold 
+----------------------------+----------------
+ usuario_id                 | f
+ nome                       | f
+ email                      | f
+ cpf                        | f
+ telefone                   | f
+ data_nascimento            | f
+ cidade                     | f
+ uf                         | t
+ necessidade_acessibilidade | f
+ data_cadastro              | f
+(10 rows)
+
+== 7) Permissao do usuario do dashboard ==
+ schema_name | superset_leitura_acessa 
+-------------+-------------------------
+ gold        | t
+ qualidade   | t
+ bronze      | f
+ lgpd        | f
+ silver      | f
+(5 rows)
+

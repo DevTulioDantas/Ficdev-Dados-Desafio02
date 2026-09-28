@@ -4,7 +4,8 @@
 --
 -- Modelo estrela:
 --   gold.dim_conteudo       1 linha por conteudo
---   gold.dim_usuario        1 linha por usuario (sem dados pessoais)
+--   gold.dim_usuario        1 linha por usuario, identificado por PSEUDONIMO
+--                           (RF33: nenhuma tabela Gold guarda usuario_id)
 --   gold.fato_interacoes    1 linha por interacao
 --   gold.fato_recomendacao  1 linha por recomendacao do LOTE MAIS RECENTE
 --
@@ -13,7 +14,8 @@
 --   gold.vw_kpi_conteudo
 --   gold.vw_kpi_recomendacao
 --
--- A Gold le somente a Silver (e public.usuario, fonte mestre de usuarios).
+-- A Gold le a Silver, public.usuario e, para identificar usuarios, somente
+-- lgpd.usuario_pseudonimo / lgpd.usuario_protegido (pseudonimo e mascaras).
 -- O dashboard le somente a Gold, nunca a Bronze.
 -- =====================================================================
 
@@ -38,14 +40,22 @@ CREATE TABLE IF NOT EXISTS gold.dim_conteudo
 );
 
 -- ---------------------------------------------------------------------
--- Dimensao usuario
--- Chave: usuario_id. Somente atributos derivados do comportamento.
+-- Dimensao usuario (RF32/RF33 - minimizacao)
+-- Chave: usuario_pseudonimo (HMAC do usuario_id; a correspondencia fica em
+-- lgpd.usuario_pseudonimo, fora do alcance do dashboard).
+-- Dados pessoais so aparecem MASCARADOS (nome, e-mail) ou GENERALIZADOS
+-- (faixa etaria, UF). CPF, telefone, data de nascimento e o dado sensivel
+-- (acessibilidade) nao entram na Gold.
 -- usuario_ativo: interagiu nos 30 dias anteriores a data de referencia
 -- (data da interacao mais recente registrada na base).
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS gold.dim_usuario
 (
-  usuario_id              INTEGER PRIMARY KEY
+  usuario_pseudonimo      VARCHAR(20) PRIMARY KEY
+, nome_mascarado          TEXT
+, email_mascarado         TEXT
+, faixa_etaria            TEXT
+, uf                      CHAR(2)
 , data_primeira_interacao DATE
 , data_ultima_interacao   DATE
 , total_interacoes        INTEGER
@@ -64,7 +74,7 @@ CREATE TABLE IF NOT EXISTS gold.dim_usuario
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS gold.fato_interacoes
 (
-  usuario_id              INTEGER   NOT NULL
+  usuario_pseudonimo      VARCHAR(20) NOT NULL
 , conteudo_id             INTEGER   NOT NULL
 , tipo_interacao          TEXT      NOT NULL
 , data_hora               TIMESTAMP NOT NULL
@@ -77,7 +87,7 @@ CREATE TABLE IF NOT EXISTS gold.fato_interacoes
 , antes_da_publicacao     BOOLEAN
 , data_hora_processamento TIMESTAMP
 , id_execucao             TEXT
-, PRIMARY KEY (usuario_id, conteudo_id, tipo_interacao, data_hora)
+, PRIMARY KEY (usuario_pseudonimo, conteudo_id, tipo_interacao, data_hora)
 );
 
 -- ---------------------------------------------------------------------
@@ -90,7 +100,7 @@ CREATE TABLE IF NOT EXISTS gold.fato_interacoes
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS gold.fato_recomendacao
 (
-  usuario_id                  INTEGER   NOT NULL
+  usuario_pseudonimo          VARCHAR(20) NOT NULL
 , posicao                     SMALLINT  NOT NULL
 , conteudo_id                 INTEGER   NOT NULL
 , recomendacao_id             BIGINT
@@ -101,7 +111,7 @@ CREATE TABLE IF NOT EXISTS gold.fato_recomendacao
 , data_primeira_interacao_pos TIMESTAMP
 , data_hora_processamento     TIMESTAMP
 , id_execucao                 TEXT
-, PRIMARY KEY (usuario_id, posicao)
+, PRIMARY KEY (usuario_pseudonimo, posicao)
 );
 
 -- ---------------------------------------------------------------------
@@ -113,11 +123,11 @@ CREATE TABLE IF NOT EXISTS gold.fato_recomendacao
 CREATE OR REPLACE VIEW gold.vw_kpi_engajamento_mensal AS
 SELECT f.ano_mes
      , COUNT(*)                                        AS interacoes
-     , COUNT(DISTINCT f.usuario_id)                    AS usuarios_ativos
-     , COUNT(DISTINCT (f.usuario_id, f.conteudo_id))   AS pares_usuario_conteudo
-     , COUNT(DISTINCT (f.usuario_id, f.conteudo_id)) FILTER (WHERE f.concluiu) AS pares_concluidos
-     , ROUND(100.0 * COUNT(DISTINCT (f.usuario_id, f.conteudo_id)) FILTER (WHERE f.concluiu)
-             / NULLIF(COUNT(DISTINCT (f.usuario_id, f.conteudo_id)), 0), 2) AS taxa_conclusao_pct
+     , COUNT(DISTINCT f.usuario_pseudonimo)                    AS usuarios_ativos
+     , COUNT(DISTINCT (f.usuario_pseudonimo, f.conteudo_id))   AS pares_usuario_conteudo
+     , COUNT(DISTINCT (f.usuario_pseudonimo, f.conteudo_id)) FILTER (WHERE f.concluiu) AS pares_concluidos
+     , ROUND(100.0 * COUNT(DISTINCT (f.usuario_pseudonimo, f.conteudo_id)) FILTER (WHERE f.concluiu)
+             / NULLIF(COUNT(DISTINCT (f.usuario_pseudonimo, f.conteudo_id)), 0), 2) AS taxa_conclusao_pct
      , ROUND(AVG(f.avaliacao_atribuida), 2)            AS avaliacao_media
      , SUM(f.tempo_consumido)                          AS tempo_consumido_total
 FROM gold.fato_interacoes f
@@ -130,10 +140,10 @@ CREATE OR REPLACE VIEW gold.vw_kpi_conteudo AS
 SELECT d.categoria
      , d.tipo
      , COUNT(*)                                        AS interacoes
-     , COUNT(DISTINCT f.usuario_id)                    AS usuarios
+     , COUNT(DISTINCT f.usuario_pseudonimo)                    AS usuarios
      , COUNT(DISTINCT f.conteudo_id)                   AS conteudos_com_interacao
-     , ROUND(100.0 * COUNT(DISTINCT (f.usuario_id, f.conteudo_id)) FILTER (WHERE f.concluiu)
-             / NULLIF(COUNT(DISTINCT (f.usuario_id, f.conteudo_id)), 0), 2) AS taxa_conclusao_pct
+     , ROUND(100.0 * COUNT(DISTINCT (f.usuario_pseudonimo, f.conteudo_id)) FILTER (WHERE f.concluiu)
+             / NULLIF(COUNT(DISTINCT (f.usuario_pseudonimo, f.conteudo_id)), 0), 2) AS taxa_conclusao_pct
      , ROUND(AVG(f.avaliacao_atribuida), 2)            AS avaliacao_media
      , ROUND(AVG(f.tempo_consumido), 1)                AS tempo_medio_consumido
 FROM gold.fato_interacoes f
@@ -148,7 +158,7 @@ CREATE OR REPLACE VIEW gold.vw_kpi_recomendacao AS
 SELECT r.data_geracao
      , r.status
      , COUNT(*)                                        AS recomendacoes
-     , COUNT(DISTINCT r.usuario_id)                    AS usuarios
+     , COUNT(DISTINCT r.usuario_pseudonimo)                    AS usuarios
      , ROUND(AVG(r.pontuacao), 2)                      AS pontuacao_media
      , COUNT(*) FILTER (WHERE r.convertida)            AS convertidas
      , ROUND(100.0 * COUNT(*) FILTER (WHERE r.convertida) / NULLIF(COUNT(*), 0), 2) AS taxa_conversao_pct

@@ -30,7 +30,8 @@
   SELECT MAX(data_geracao) AS data_geracao
   FROM silver.recomendacao
 )
-SELECT r.usuario_id
+-- RF33: usuario_id substituido pelo pseudonimo
+SELECT ps.pseudonimo                        AS usuario_pseudonimo
      , r.posicao
      , r.conteudo_id
      , r.recomendacao_id
@@ -41,6 +42,7 @@ SELECT r.usuario_id
      , pos.primeira_interacao               AS data_primeira_interacao_pos
 FROM silver.recomendacao r
 JOIN lote_mais_recente l ON l.data_geracao = r.data_geracao
+JOIN lgpd.usuario_pseudonimo ps ON ps.usuario_id = r.usuario_id
 LEFT JOIN LATERAL (
   SELECT MIN(i.data_hora) AS primeira_interacao
   FROM silver.interacoes_usuarios i

@@ -26,7 +26,8 @@
   <transform>
     <type>TableInput</type>
     <name>Ler silver interacoes</name>
-    <sql>SELECT i.usuario_id
+    <sql>-- RF33: usuario_id substituido pelo pseudonimo
+SELECT ps.pseudonimo                     AS usuario_pseudonimo
      , i.conteudo_id
      , i.tipo_interacao
      , i.data_hora
@@ -38,6 +39,7 @@
      , (i.tipo_interacao = 'conclusão')  AS concluiu
      , COALESCE(i.data_hora::DATE &lt; c.data_publicacao, FALSE) AS antes_da_publicacao
 FROM silver.interacoes_usuarios i
+JOIN lgpd.usuario_pseudonimo ps ON ps.usuario_id = i.usuario_id
 LEFT JOIN silver.catalogo_conteudos c ON c.conteudo_id = i.conteudo_id</sql>
     <limit>0</limit>
     <execute_each_row>N</execute_each_row>

@@ -107,7 +107,7 @@
       <description/>
       <type>SQL</type>
       <attributes/>
-      <xloc>2832</xloc>
+      <xloc>3008</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -376,7 +376,7 @@
       <description/>
       <type>WRITE_TO_LOG</type>
       <attributes/>
-      <xloc>4256</xloc>
+      <xloc>4432</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -386,7 +386,7 @@
       <description/>
       <type>SUCCESS</type>
       <attributes/>
-      <xloc>4432</xloc>
+      <xloc>4608</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -430,7 +430,7 @@
       <description/>
       <type>EVAL_TABLE_CONTENT</type>
       <attributes/>
-      <xloc>3008</xloc>
+      <xloc>3184</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -450,7 +450,7 @@
       <description/>
       <type>EVAL_TABLE_CONTENT</type>
       <attributes/>
-      <xloc>4080</xloc>
+      <xloc>4256</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -463,7 +463,7 @@
       <description/>
       <type>WRITE_TO_LOG</type>
       <attributes/>
-      <xloc>4256</xloc>
+      <xloc>4432</xloc>
       <yloc>256</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -476,7 +476,7 @@
       <description/>
       <type>WRITE_TO_LOG</type>
       <attributes/>
-      <xloc>3008</xloc>
+      <xloc>3184</xloc>
       <yloc>256</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -525,7 +525,7 @@
       <name>Gold dim conteudo</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>3184</xloc>
+      <xloc>3360</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -557,7 +557,7 @@
       <name>Gold dim usuario</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>3360</xloc>
+      <xloc>3536</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -589,7 +589,7 @@
       <name>Gold fato interacoes</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>3536</xloc>
+      <xloc>3712</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -621,7 +621,7 @@
       <name>Gold fato recomendacao</name>
       <type>PIPELINE</type>
       <attributes/>
-      <xloc>3712</xloc>
+      <xloc>3888</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -661,7 +661,7 @@
       <description>RF22 - publica catalogo, glossario e linhagem no OpenMetadata (script da Libia, sem alteracao). Codigo 0 = sucesso; 1 ou 2 = segue pelo caminho de ressalva</description>
       <type>SHELL</type>
       <attributes/>
-      <xloc>3888</xloc>
+      <xloc>4064</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -674,7 +674,7 @@
       <description/>
       <type>WRITE_TO_LOG</type>
       <attributes/>
-      <xloc>3888</xloc>
+      <xloc>4064</xloc>
       <yloc>256</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -692,6 +692,29 @@
       <type>SQL</type>
       <attributes/>
       <xloc>2656</xloc>
+      <yloc>112</yloc>
+      <parallel>N</parallel>
+      <attributes_hac/>
+    </action>
+    <action>
+      <filename/>
+      <work_directory>${PROJECT_HOME}</work_directory>
+      <arg_from_previous>N</arg_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <set_append_logfile>N</set_append_logfile>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <insertScript>Y</insertScript>
+      <script>python lgpd\proteger_dados_pessoais.py</script>
+      <loglevel>Basic</loglevel>
+      <name>Proteger dados pessoais</name>
+      <description>RF32/RF33 - pseudonimizacao, hash com salt e mascaramento (chave e salt no .env). Falha interrompe a carga: a Gold depende do pseudonimo</description>
+      <type>SHELL</type>
+      <attributes/>
+      <xloc>2832</xloc>
       <yloc>112</yloc>
       <parallel>N</parallel>
       <attributes_hac/>
@@ -812,8 +835,22 @@
     </hop>
     <hop>
       <from>Dados mestres conteudo</from>
+      <to>Proteger dados pessoais</to>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Proteger dados pessoais</from>
       <to>Testes de qualidade</to>
       <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Proteger dados pessoais</from>
+      <to>Log erro</to>
+      <evaluation>N</evaluation>
       <unconditional>N</unconditional>
       <enabled>Y</enabled>
     </hop>
