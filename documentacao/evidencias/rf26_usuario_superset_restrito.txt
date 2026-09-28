@@ -1,0 +1,16 @@
+﻿-- Leitura permitida (gold):
+ gold_ok 
+---------
+    1000
+(1 row)
+
+-- Leitura bloqueada (bronze):
+docker : ERROR:  permission denied for schema bronze
+No linha:5 caractere:53
++ ... nteudos;" | docker exec -i desafio-postgres psql -U superset_leitura  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ERROR:  permiss...r schema bronze:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+LINE 1: SELECT COUNT(*) FROM bronze.catalogo_conteudos;
+                             ^
