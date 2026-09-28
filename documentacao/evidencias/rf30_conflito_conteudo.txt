@@ -1,0 +1,26 @@
+﻿== 1) Registros de origem e a ordem de sobrevivencia ==
+ conteudo_id | id_mestre | posicao | completude |                   titulo                    |     nivel     | carga_horaria_min | data_publicacao |           autor           | descricao  
+-------------+-----------+---------+------------+---------------------------------------------+---------------+-------------------+-----------------+---------------------------+------------
+        9002 | MC-009001 |       1 |          7 | Fundamentos de Governança de Dados com LGPD | Intermediário |               720 | 2026-02-15      | Marina Alves Costa        | (vazia)
+        9001 | MC-009001 |       2 |          8 | FUNDAMENTOS DE GOVERNANÇA DE DADOS COM LGPD | Intermediário |               600 | 2025-03-10      | Profa. Marina Alves Costa | preenchida
+(2 rows)
+
+== 2) Tabela de correspondencia (de/para) ==
+ conteudo_id | id_mestre | vencedor |                             motivo                              |                                   chave_negocio                                    
+-------------+-----------+----------+-----------------------------------------------------------------+------------------------------------------------------------------------------------
+        9001 | MC-009001 | f        | duplicado: consolidado no registro mestre                       | fundamentos de governanca de dados com lgpd|curso|intermediario|marina alves costa
+        9002 | MC-009001 | t        | vencedor: versao mais recente (desempate: completude, menor id) | fundamentos de governanca de dados com lgpd|curso|intermediario|marina alves costa
+(2 rows)
+
+== 3) Registro mestre (golden record) ==
+ id_mestre |                   titulo                    |     nivel     | carga_horaria_min |       autor        |                descricao                 | data_primeira_publicacao | data_ultima_versao | conteudo_id_vencedor | qtd_registros_origem 
+-----------+---------------------------------------------+---------------+-------------------+--------------------+------------------------------------------+--------------------------+--------------------+----------------------+----------------------
+ MC-009001 | Fundamentos de Governança de Dados com LGPD | Intermediário |               720 | Marina Alves Costa | Curso introdutório sobre governança de d | 2025-03-10               | 2026-02-15         |                 9002 |                    2
+(1 row)
+
+== 4) Visao geral: conteudos de origem x registros mestres ==
+ registros_origem | registros_mestres | mestres_consolidados 
+------------------+-------------------+----------------------
+             1002 |               998 |                    4
+(1 row)
+
