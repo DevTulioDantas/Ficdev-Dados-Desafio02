@@ -1,35 +1,37 @@
-2026-09-27 23:42:18,986 [manual] INFO Responsáveis: 3 usuários + equipe equipe_dados_ficdev
-2026-09-27 23:42:19,468 [manual] INFO Classificação LGPD: 8 tags
-2026-09-27 23:42:19,870 [manual] INFO Classificação Camada: 6 tags
-2026-09-27 23:42:20,309 [manual] INFO Glossário GlossarioEducacional: 6 termos
-2026-09-27 23:42:20,422 [manual] INFO Tabela public.conteudo: descrição, dono, 1 colunas anotadas
-2026-09-27 23:42:20,539 [manual] INFO Tabela public.interacao: descrição, dono, 1 colunas anotadas
-2026-09-27 23:42:20,640 [manual] INFO Tabela public.recomendacao: descrição, dono, 1 colunas anotadas
-2026-09-27 23:42:20,779 [manual] INFO Tabela public.usuario: descrição, dono, 1 colunas anotadas
-2026-09-27 23:42:20,914 [manual] INFO Tabela bronze.catalogo_conteudos: descrição, dono, 2 colunas anotadas
-2026-09-27 23:42:21,024 [manual] INFO Tabela bronze.interacoes_usuarios: descrição, dono, 2 colunas anotadas
-2026-09-27 23:42:21,159 [manual] INFO Tabela bronze.comentarios_avaliacoes: descrição, dono, 3 colunas anotadas
-2026-09-27 23:42:21,277 [manual] INFO Tabela bronze.recomendacao: descrição, dono, 2 colunas anotadas
-2026-09-27 23:42:21,652 [manual] INFO Tabela silver.catalogo_conteudos: descrição, dono, 3 colunas anotadas
-2026-09-27 23:42:21,828 [manual] INFO Tabela silver.interacoes_usuarios: descrição, dono, 3 colunas anotadas
-2026-09-27 23:42:21,992 [manual] INFO Tabela silver.comentarios_avaliacoes: descrição, dono, 4 colunas anotadas
-2026-09-27 23:42:22,166 [manual] INFO Tabela silver.recomendacao: descrição, dono, 3 colunas anotadas
-2026-09-27 23:42:22,412 [manual] INFO Tabela silver.rejeitados_catalogo: descrição, dono, 2 colunas anotadas
-2026-09-27 23:42:22,519 [manual] INFO Tabela silver.rejeitados_interacoes: descrição, dono, 2 colunas anotadas
-2026-09-27 23:42:22,627 [manual] INFO Tabela silver.rejeitados_comentarios: descrição, dono, 3 colunas anotadas
-2026-09-27 23:42:22,722 [manual] INFO Tabela silver.rejeitados_recomendacao: descrição, dono, 2 colunas anotadas
-2026-09-27 23:42:22,798 [manual] INFO Tabela qualidade.regras_testes: descrição, dono, 0 colunas anotadas
-2026-09-27 23:42:22,882 [manual] INFO Tabela qualidade.resultados_testes: descrição, dono, 1 colunas anotadas
-2026-09-27 23:42:22,973 [manual] INFO Tabela gold.dim_conteudo: descrição, dono, 4 colunas anotadas
-2026-09-27 23:42:23,057 [manual] INFO Tabela gold.dim_usuario: descrição, dono, 3 colunas anotadas
-2026-09-27 23:42:23,149 [manual] INFO Tabela gold.fato_interacoes: descrição, dono, 5 colunas anotadas
-2026-09-27 23:42:23,232 [manual] INFO Tabela gold.fato_recomendacao: descrição, dono, 3 colunas anotadas
-2026-09-27 23:42:23,319 [manual] INFO Tabela gold.vw_kpi_engajamento_mensal: descrição, dono, 3 colunas anotadas
-2026-09-27 23:42:23,400 [manual] INFO Tabela gold.vw_kpi_conteudo: descrição, dono, 2 colunas anotadas
-2026-09-27 23:42:23,489 [manual] INFO Tabela gold.vw_kpi_recomendacao: descrição, dono, 1 colunas anotadas
-2026-09-27 23:42:23,919 [manual] INFO Arquivos (fontes e Parquet): 6
-2026-09-27 23:42:24,797 [manual] INFO Pipelines Hop: 15
-2026-09-27 23:42:25,648 [manual] INFO Superset: 2 datasets virtuais, 3 gráficos, 1 dashboards
-2026-09-27 23:42:34,732 [manual] INFO Linhagem manual: 27 arestas
-2026-09-27 23:42:34,885 [manual] INFO Auditoria: 0 problema(s)
-2026-09-27 23:42:34,885 [manual] INFO SUCESSO: metadados publicados
+2026-09-28 00:17:52,761 [manual] INFO Responsáveis: 3 usuários + equipe equipe_dados_ficdev
+2026-09-28 00:17:53,416 [manual] INFO Classificação LGPD: 8 tags
+2026-09-28 00:17:53,977 [manual] INFO Classificação Camada: 6 tags
+2026-09-28 00:17:54,194 [manual] INFO Classificação SeveridadeQualidade: 2 tags
+2026-09-28 00:17:54,850 [manual] INFO Glossário GlossarioEducacional: 6 termos
+2026-09-28 00:17:55,121 [manual] INFO Tabela public.conteudo: descrição, dono, 1 colunas anotadas
+2026-09-28 00:17:55,226 [manual] INFO Tabela public.interacao: descrição, dono, 1 colunas anotadas
+2026-09-28 00:17:55,327 [manual] INFO Tabela public.recomendacao: descrição, dono, 1 colunas anotadas
+2026-09-28 00:17:55,427 [manual] INFO Tabela public.usuario: descrição, dono, 1 colunas anotadas
+2026-09-28 00:17:55,527 [manual] INFO Tabela bronze.catalogo_conteudos: descrição, dono, 2 colunas anotadas
+2026-09-28 00:17:55,623 [manual] INFO Tabela bronze.interacoes_usuarios: descrição, dono, 2 colunas anotadas
+2026-09-28 00:17:55,718 [manual] INFO Tabela bronze.comentarios_avaliacoes: descrição, dono, 3 colunas anotadas
+2026-09-28 00:17:55,801 [manual] INFO Tabela bronze.recomendacao: descrição, dono, 2 colunas anotadas
+2026-09-28 00:17:55,913 [manual] INFO Tabela silver.catalogo_conteudos: descrição, dono, 3 colunas anotadas
+2026-09-28 00:17:56,052 [manual] INFO Tabela silver.interacoes_usuarios: descrição, dono, 3 colunas anotadas
+2026-09-28 00:17:56,144 [manual] INFO Tabela silver.comentarios_avaliacoes: descrição, dono, 4 colunas anotadas
+2026-09-28 00:17:56,253 [manual] INFO Tabela silver.recomendacao: descrição, dono, 3 colunas anotadas
+2026-09-28 00:17:56,364 [manual] INFO Tabela silver.rejeitados_catalogo: descrição, dono, 2 colunas anotadas
+2026-09-28 00:17:56,448 [manual] INFO Tabela silver.rejeitados_interacoes: descrição, dono, 2 colunas anotadas
+2026-09-28 00:17:56,539 [manual] INFO Tabela silver.rejeitados_comentarios: descrição, dono, 3 colunas anotadas
+2026-09-28 00:17:56,629 [manual] INFO Tabela silver.rejeitados_recomendacao: descrição, dono, 2 colunas anotadas
+2026-09-28 00:17:56,706 [manual] INFO Tabela qualidade.regras_testes: descrição, dono, 0 colunas anotadas
+2026-09-28 00:17:56,783 [manual] INFO Tabela qualidade.resultados_testes: descrição, dono, 1 colunas anotadas
+2026-09-28 00:17:56,864 [manual] INFO Tabela gold.dim_conteudo: descrição, dono, 4 colunas anotadas
+2026-09-28 00:17:56,952 [manual] INFO Tabela gold.dim_usuario: descrição, dono, 3 colunas anotadas
+2026-09-28 00:17:57,044 [manual] INFO Tabela gold.fato_interacoes: descrição, dono, 5 colunas anotadas
+2026-09-28 00:17:57,253 [manual] INFO Tabela gold.fato_recomendacao: descrição, dono, 3 colunas anotadas
+2026-09-28 00:17:57,388 [manual] INFO Tabela gold.vw_kpi_engajamento_mensal: descrição, dono, 3 colunas anotadas
+2026-09-28 00:17:57,491 [manual] INFO Tabela gold.vw_kpi_conteudo: descrição, dono, 2 colunas anotadas
+2026-09-28 00:17:57,587 [manual] INFO Tabela gold.vw_kpi_recomendacao: descrição, dono, 1 colunas anotadas
+2026-09-28 00:17:58,117 [manual] INFO Arquivos (fontes e Parquet): 6
+2026-09-28 00:18:00,359 [manual] INFO Pipelines Hop: 15
+2026-09-28 00:18:02,667 [manual] INFO Superset: 2 datasets virtuais, 3 gráficos, 1 dashboards
+2026-09-28 00:18:14,247 [manual] INFO Linhagem manual: 27 arestas
+2026-09-28 00:18:18,630 [manual] INFO Qualidade: 5 testes, 0 resultados novos enviados (6 execuções no banco)
+2026-09-28 00:18:18,737 [manual] INFO Auditoria: 0 problema(s)
+2026-09-28 00:18:18,738 [manual] INFO SUCESSO: metadados publicados

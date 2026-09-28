@@ -114,6 +114,32 @@ silver.interacoes_usuarios ─(exportar_interacoes)─> Parquet ─(engajamento_
 do glossário) → Silver (o pipeline Hop da aresta mostra a transformação) → Bronze
 (`origem`, `data_hora_ingestao`, `id_execucao`) → arquivo-fonte.
 
+## Qualidade de dados no catálogo (RF31)
+
+Os testes Q01–Q05 rodam em SQL no workflow `carga_completa` e gravam em `qualidade.resultados_testes`.
+O `publicar_metadados.py` lê regras e resultados do PostgreSQL e publica no OpenMetadata:
+
+| Teste | Dimensão (OM) | Tabela | Severidade |
+|---|---|---|---|
+| Q01 Completude da descrição | Completeness | `silver.catalogo_conteudos` | Alerta |
+| Q02 Validade da pontuação | Validity | `silver.recomendacao` | **Crítica** |
+| Q03 Unicidade de `conteudo_id` | Uniqueness | `silver.catalogo_conteudos` | **Crítica** |
+| Q04 Consistência temporal | Consistency | `silver.interacoes_usuarios` | Alerta |
+| Q05 Integridade referencial | Integrity | `silver.interacoes_usuarios` | **Crítica** |
+
+- Cada teste é um *test case* ligado à tabela medida, com fórmula, limite, severidade e ação
+  (parâmetros e descrição) e a tag `SeveridadeQualidade.Critica|Alerta`.
+- Cada execução do workflow vira um ponto no **histórico** (gráfico de evolução no OM). Reenvio é
+  idempotente: resultados já publicados (mesmo timestamp) são ignorados.
+- Suíte lógica **Qualidade Desafio 2** reúne os 5 testes em uma tela.
+
+**Evolução demonstrada:** o Q02 ficou em **0%** na execução em que `public.recomendacao` estava vazia
+(teste crítico reprovado → Gold bloqueada) e em **100%** depois da correção; o Q04 permanece em
+**7,7%** (limite 5%, alerta → "sucesso com ressalvas").
+
+Onde ver: **Observability → Data Quality** (aba *Test Suites* → `Qualidade Desafio 2`), ou na tabela
+→ aba **Data Observability**. Clique no teste para ver o gráfico.
+
 ## Controles contra o Data Swamp (RF27)
 
 1. **Nada entra sem dono e descrição**: a auditoria (`--auditar`, também roda ao fim da publicação)
@@ -137,4 +163,6 @@ Capturas em `openmetadata/evidencias/`:
 - [ ] classificação `LGPD` com as tags
 - [ ] linhagem de `silver.interacoes_usuarios` (arquivo → Bronze → Silver)
 - [ ] linhagem de ponta a ponta até o `painel_executivo` (ex.: a partir de `gold.vw_kpi_recomendacao`)
-- [ ] saída do `publicar_metadados.py` (log com o id_execucao)
+- [ ] suíte `Qualidade Desafio 2` com os 5 testes e o status
+- [ ] gráfico de evolução do Q02 (0% → 100%) e do Q04 (7,7%)
+- [x] saída do `publicar_metadados.py` (`evidencias/publicacao_metadados.txt`)
