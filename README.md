@@ -15,11 +15,9 @@ Dependências Python: `pip install -r requirements.txt`.
 
 ## Equipe
 
-| Integrante | Responsabilidade principal |
-|---|---|
-| Túlio Dantas | _a definir_ |
-| Gabriele Silva | _a definir_ |
-| Libia Canete | _a definir_ |
+Túlio Dantas
+Líbia Canete
+Gabriele Silva
 
 ## Status
 
