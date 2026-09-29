@@ -655,7 +655,7 @@
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>python openmetadata\publicar_metadados.py</script>
+      <script>python openmetadata/publicar_metadados.py</script>
       <loglevel>Basic</loglevel>
       <name>Publicar metadados</name>
       <description>RF22 - publica catalogo, glossario e linhagem no OpenMetadata (script da Libia, sem alteracao). Codigo 0 = sucesso; 1 ou 2 = segue pelo caminho de ressalva</description>
@@ -708,7 +708,7 @@
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>python lgpd\proteger_dados_pessoais.py</script>
+      <script>python lgpd/proteger_dados_pessoais.py</script>
       <loglevel>Basic</loglevel>
       <name>Proteger dados pessoais</name>
       <description>RF32/RF33 - pseudonimizacao, hash com salt e mascaramento (chave e salt no .env). Falha interrompe a carga: a Gold depende do pseudonimo</description>
