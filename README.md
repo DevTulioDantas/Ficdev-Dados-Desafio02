@@ -1,15 +1,25 @@
-# Desafio Prático 2 — Pipeline Governado, Escalável e Seguro de Conteúdos Educacionais
+git add README.md
+git commit -m "README: link para o guia de instalacao (Windows, Linux e macOS)"
+git push# Desafio Prático 2 — Pipeline Governado, Escalável e Seguro de Conteúdos Educacionais
 
 Fundamentos de Dados para IA — FIC_DEV
 
 Continuação do [Desafio Prático 1](https://github.com/DevTulioDantas/-Ficdev-Dados-Desafio01).
 
+## Instalação
+
+Passo a passo completo para **Windows, Linux e macOS** (pré-requisitos, plugins do Hop,
+segredos, execução, agendamento, Beam, Superset e OpenMetadata):
+**[`documentacao/instalacao.md`](documentacao/instalacao.md)**.
+Dependências Python: `pip install -r requirements.txt`.
+
 ## Equipe
 
-Integrantes:
-Túlio Dantas
-Líbia Canete
-Gabriele Silva
+| Integrante | Responsabilidade principal |
+|---|---|
+| Túlio Dantas | _a definir_ |
+| Gabriele Silva | _a definir_ |
+| Libia Canete | _a definir_ |
 
 ## Status
 
@@ -24,9 +34,9 @@ Gabriele Silva
 | RF23 | Erros e quarentena | ✅ | `documentacao/evidencias/rf23_*.txt` |
 | RF24–RF25 | Parquet e Apache Beam | ✅ | [`beam/evidencias/`](beam/evidencias/) |
 | RF26 | Camada Gold | ✅ | `sql/05_criar_tabelas_gold.sql`, `documentacao/evidencias/rf26_*.txt` |
-| RF27–RF29 | OpenMetadata: catálogo, glossário, linhagem | ✅ publicação automática ·  | [`openmetadata/`](openmetadata/) |
+| RF27–RF29 | OpenMetadata: catálogo, glossário, linhagem | ✅ publicação automática · ⚠️ capturas de tela pendentes | [`openmetadata/`](openmetadata/) |
 | RF30 | Dados mestres | ✅ | [`rf30_dados_mestres.md`](documentacao/rf30_dados_mestres.md) |
-| RF31 | Qualidade | ✅ | `documentacao/evidencias/rf31_resultados_qualidade.txt` |
+| RF31 | Qualidade | ✅ | [`qualidade/regras.md`](qualidade/regras.md), `documentacao/evidencias/rf31_resultados_qualidade.txt` |
 | RF32–RF33 | LGPD | ✅ | [`rf32_rf33_lgpd.md`](documentacao/rf32_rf33_lgpd.md) |
 | RF34 | Evidências | ✅ (pendências marcadas no índice) | [`rf34_evidencias.md`](documentacao/rf34_evidencias.md) |
 
@@ -58,7 +68,8 @@ O usuário de leitura do Superset é criado uma vez com `sql/06_criar_usuario_su
 
 ```powershell
 # carga completa (Bronze → Silver → qualidade → Gold), com log em logs/
-scripts\executar_carga_completa.bat
+scripts\executar_carga_completa.bat        # Windows
+./scripts/executar_carga_completa.sh        # Linux e macOS
 
 # agendamento diário às 06:00 no Agendador de Tarefas do Windows
 powershell -ExecutionPolicy Bypass -File scripts\configurar_agendamento.ps1
@@ -117,8 +128,10 @@ desafio_dados_2/
 ├── superset/          # exportações e evidências (o Superset roda via Docker)
 ├── openmetadata/      # evidências de catálogo, glossário e linhagem
 ├── lgpd/              # script de pseudonimização, hash com salt e mascaramento
-├── scripts/           # execução manual e agendamento da carga
-└── documentacao/      # arquitetura, regras, mestres, LGPD, narrativa, índice de evidências
+├── qualidade/         # regras dos testes de qualidade
+├── scripts/           # execução manual (.bat / .sh) e agendamento da carga
+├── documentacao/      # instalação, arquitetura, regras, mestres, LGPD, narrativa, evidências
+└── requirements.txt   # dependências Python
 ```
 
 Versões das ferramentas: [`documentacao/versoes.md`](documentacao/versoes.md).
